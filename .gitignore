@@ -1,6 +1,12 @@
 # Binaries
 bin/
-vendor/
+vendor/glfw/bin
+vendor/glfw/bin-int
+vendor/glad/bin
+vendor/glad/bin-int
+vendor/imgui/bin
+vendor/imgui/bin-int
+
 build/
 
 # Visual Studio files and folder
