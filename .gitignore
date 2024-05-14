@@ -17,3 +17,4 @@ build/
 **.vcxproj.user
 
 # Directories
+logs/

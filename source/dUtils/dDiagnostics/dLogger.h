@@ -8,11 +8,14 @@ namespace dDiagnostics {
 	// logging class
 	class dLog {
 	public:
+		// initialize the logging system
 		static void Init();
 
+		// get the logging system
 		inline static std::shared_ptr<spdlog::logger>& GetLogger() { return s_logger; }
 
 	private:
+		// ptr to the logging system
 		static std::shared_ptr<spdlog::logger> s_logger;
 	};
 }
