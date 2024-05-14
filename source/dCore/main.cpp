@@ -1,4 +1,5 @@
 #include "dUtils/dDiagnostics/dLogger.h"
+#include "dUtils/dDiagnostics/dErrKit.h"
 
 #include <iostream>
 
@@ -20,7 +21,14 @@ int main() {
 
     dDiagnostics::dLog::Init();
 
-    DB_TRACE("Lets bring flowers???");
+    DB_TRACE("Lets bring flowers");
+    DB_INFO("Lets bring flowers");
+    DB_WARN("Lets bring flowers");
+    DB_ERROR("Lets bring flowers");
+    DB_FATAL("Lets bring flowers");
+
+    // Example of reporting an error
+    dDiagnostics::reportError(dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
 
     // Initialize GLFW
     if (!glfwInit()) {
