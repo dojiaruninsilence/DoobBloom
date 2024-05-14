@@ -24,6 +24,7 @@ project "DoobBloom"
     includedirs
     {
         "%{wks.location}/source",
+        "%{wks.location}/vendor/spdlog/include",
         "%{IncludeDir.glfw}",
         "%{IncludeDir.glad}",
         "%{IncludeDir.imgui}"
