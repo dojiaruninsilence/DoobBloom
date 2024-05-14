@@ -34,7 +34,10 @@ int main() {
     DB_FATAL_QUIET("Lets bring flowers");
 
     // Example of reporting an error
-    dDiagnostics::reportError(dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+    dDiagnostics::reportError(dDiagnostics::errorLevel::D_INFO, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+    dDiagnostics::reportError(dDiagnostics::errorLevel::D_WARNING, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+    dDiagnostics::reportError(dDiagnostics::errorLevel::D_ERROR, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+    dDiagnostics::reportError(dDiagnostics::errorLevel::D_FATAL, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
 
     // Initialize GLFW
     if (!glfwInit()) {
