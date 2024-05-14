@@ -27,6 +27,12 @@ int main() {
     DB_ERROR("Lets bring flowers");
     DB_FATAL("Lets bring flowers");
 
+    DB_TRACE_QUIET("Lets bring flowers");
+    DB_INFO_QUIET("Lets bring flowers");
+    DB_WARN_QUIET("Lets bring flowers");
+    DB_ERROR_QUIET("Lets bring flowers");
+    DB_FATAL_QUIET("Lets bring flowers");
+
     // Example of reporting an error
     dDiagnostics::reportError(dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
 

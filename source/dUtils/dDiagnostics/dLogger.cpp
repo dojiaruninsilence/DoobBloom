@@ -9,6 +9,7 @@
 namespace dDiagnostics {
 
 	std::shared_ptr<spdlog::logger> dLog::s_logger;
+	std::shared_ptr<spdlog::logger> dLog::s_loggerQuiet;
 
 	void dLog::Init() {
 		// set the logging pattern
@@ -27,10 +28,15 @@ namespace dDiagnostics {
 		std::vector<spdlog::sink_ptr> sinks = { console_sink, file_sink };
 		s_logger = std::make_shared<spdlog::logger>("DB", begin(sinks), end(sinks));
 
+		// create a logger with only a file sink
+		s_loggerQuiet = std::make_shared<spdlog::logger>("DBQ", file_sink);
+
 		// set the log level
 		s_logger->set_level(spdlog::level::trace);
+		s_loggerQuiet->set_level(spdlog::level::trace);
 
-		// register the logger with spdlog
+		// register the loggers with spdlog
 		spdlog::register_logger(s_logger);
+		spdlog::register_logger(s_loggerQuiet);
 	}
 }
