@@ -1,5 +1,6 @@
 #include "dUtils/dDiagnostics/dLogger.h"
 #include "dUtils/dDiagnostics/dErrKit.h"
+#include "dUtils/dDiagnostics/dAssert.h"
 
 #include <iostream>
 
@@ -37,8 +38,8 @@ int main() {
     dDiagnostics::reportError(dDiagnostics::errorLevel::D_INFO, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
     dDiagnostics::reportError(dDiagnostics::errorLevel::D_WARNING, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
     dDiagnostics::reportError(dDiagnostics::errorLevel::D_ERROR, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
-    dDiagnostics::reportError(dDiagnostics::errorLevel::D_FATAL, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
-
+    //dDiagnostics::reportError(dDiagnostics::errorLevel::D_FATAL, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+   
     // Initialize GLFW
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
