@@ -1,10 +1,9 @@
-#include "dLogger.h"
+#include "dbpch.h"
+
+#include "dUtils/dMath/dGeneralMath/dVector.h"
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
-
-// super temp
-#include <vector>
 
 namespace dDiagnostics {
 
@@ -25,8 +24,12 @@ namespace dDiagnostics {
 		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFilePath, true);
 
 		// create a logger with both console and file sinks
-		std::vector<spdlog::sink_ptr> sinks = { console_sink, file_sink };
-		s_logger = std::make_shared<spdlog::logger>("DB", begin(sinks), end(sinks));
+		dMath::dVector<spdlog::sink_ptr> sinks;
+		sinks.push_back(console_sink);
+		sinks.push_back(file_sink);
+		//std::vector<spdlog::sink_ptr> sinks = { console_sink, file_sink };
+		s_logger = std::make_shared<spdlog::logger>("DB", sinks.begin(), sinks.end());
+
 
 		// create a logger with only a file sink
 		s_loggerQuiet = std::make_shared<spdlog::logger>("DBQ", file_sink);

@@ -9,6 +9,9 @@ project "DoobBloom"
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/build/" .. outputdir .. "/%{prj.name}")
 
+    pchheader "dbpch.h"
+    pchsource "dUtils/dbpch.cpp"
+
     files
     {
         "**.h",
@@ -24,6 +27,7 @@ project "DoobBloom"
     includedirs
     {
         "%{wks.location}/source",
+        "%{wks.location}/source/dUtils",
         "%{wks.location}/vendor/spdlog/include",
         "%{IncludeDir.glfw}",
         "%{IncludeDir.glad}",

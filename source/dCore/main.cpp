@@ -1,8 +1,6 @@
-#include "dUtils/dDiagnostics/dLogger.h"
-#include "dUtils/dDiagnostics/dErrKit.h"
-#include "dUtils/dDiagnostics/dAssert.h"
+#include "dbpch.h"
 
-#include <iostream>
+#include "dUtils/dMath/dGeneralMath/dVector.h"
 
 #include <imgui.h>
 
@@ -39,6 +37,35 @@ int main() {
     dDiagnostics::reportError(dDiagnostics::errorLevel::D_WARNING, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
     dDiagnostics::reportError(dDiagnostics::errorLevel::D_ERROR, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
     //dDiagnostics::reportError(dDiagnostics::errorLevel::D_FATAL, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+
+     // Test dVector with int type
+    dMath::dVector<int> intVector;
+
+    // Test push_back
+    intVector.push_back(4);
+    intVector.push_back(2);
+    intVector.push_back(6);
+    intVector.push_back(1);
+
+    // Test min and max
+    std::cout << "Minimum value in intVector: " << intVector.min() << std::endl;
+    std::cout << "Maximum value in intVector: " << intVector.max() << std::endl;
+
+    // Test dVector with double type
+    dMath::dVector<double> doubleVector;
+
+    // Test push_back
+    doubleVector.push_back(3.5);
+    doubleVector.push_back(1.5);
+    doubleVector.push_back(2.5);
+    doubleVector.push_back(4.5);
+
+    // Test min and max
+    std::cout << "Minimum value in doubleVector: " << doubleVector.min() << std::endl;
+    std::cout << "Maximum value in doubleVector: " << doubleVector.max() << std::endl;
+
+
+    
    
     // Initialize GLFW
     if (!glfwInit()) {

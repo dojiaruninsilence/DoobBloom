@@ -1,5 +1,4 @@
-#include "dErrKit.h"
-
+#include "dbpch.h"
 
 namespace dDiagnostics {
     // function to report errors
