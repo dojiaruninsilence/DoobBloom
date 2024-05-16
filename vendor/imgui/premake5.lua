@@ -25,6 +25,11 @@ project "imgui"
 	filter "system:windows"
 		systemversion "latest"
 
+		defines
+		{
+			"_CRT_SECURE_NO_WARNINGS"
+		}
+
 	filter "system:linux"
 		pic "On"
 		systemversion "latest"

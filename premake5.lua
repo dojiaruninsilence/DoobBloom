@@ -1,7 +1,7 @@
 -- main premake
 workspace "DoobBloom"
     architecture "x64"
-    startproject "DoobBloom"
+    startproject "bloom"
 
     configurations
     {
@@ -23,3 +23,4 @@ workspace "DoobBloom"
     include "vendor/imgui"
 
     include "source"
+    include "bloom"

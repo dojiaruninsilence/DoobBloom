@@ -31,6 +31,11 @@ project "glad"
 	filter "system:windows"
 		systemversion "latest"
 
+		defines
+		{
+			"_CRT_SECURE_NO_WARNINGS"
+		}
+
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"

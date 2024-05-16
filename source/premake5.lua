@@ -1,7 +1,7 @@
 -- DoobBloom premake
 
 project "DoobBloom"
-    kind "ConsoleApp"
+    kind "StaticLib"
     language "C++"
 	cppdialect "C++17"
 	staticruntime "off"

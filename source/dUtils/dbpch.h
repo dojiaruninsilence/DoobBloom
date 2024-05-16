@@ -14,6 +14,8 @@
 #include <unordered_set>
 
 // utility and helper functions
+#include "dCore/dCoreConfig.h"
+
 #include "dUtils/dDiagnostics/dAssert.h"
 #include "dUtils/dDiagnostics/dErrKit.h"
 #include "dUtils/dDiagnostics/dLogger.h"
