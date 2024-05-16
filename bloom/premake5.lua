@@ -19,12 +19,18 @@ project "bloom"
         "%{wks.location}/bloom/src",
         "%{wks.location}/source",
         "%{wks.location}/source/dUtils",
+        "%{wks.location}/vendor",
         "%{wks.location}/vendor/spdlog/include"
     }
 
     links
     {
         "DoobBloom"
+    }
+
+    libdirs
+    {
+        "%{wks.location}/bin/" .. outputdir .. "/DoobBloom"
     }
 
     filter "system:windows"
