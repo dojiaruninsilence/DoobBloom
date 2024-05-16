@@ -2,14 +2,18 @@
 
 #include "dApplication.h"
 
-dApplication::dApplication() {
+namespace doob {
 
-}
+	dApplication::dApplication() {
 
-dApplication::~dApplication() {
+	}
 
-}
+	dApplication::~dApplication() {
 
-void dApplication::run() {
-	while (true);
+	}
+
+	void dApplication::run() {
+		while (true);
+	}
+
 }

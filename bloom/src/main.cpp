@@ -2,18 +2,20 @@
 
 #include "dUtils/dOutwardIncludes.h"
 
-//class bloom : public dApplication {
+//class bloom : public doob::dApplication {
 //public:
 //	bloom() {}
 //
 //	~bloom() {}
 //};
 //
-//dApplication* createApplication() {
-//	//DB_TRACE("bloom created");
+//doob::dApplication* doob::createApplication() {
+//	DB_TRACE("bloom created");
 //	return new bloom();
 //}
 
 int main() {
-	printf("did it work");
+	dDiagnostics::dLog::Init();
+	DB_INFO("did it work");
+	//printf("did it work");
 }

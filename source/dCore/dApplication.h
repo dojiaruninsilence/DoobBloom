@@ -1,11 +1,14 @@
 #pragma once
 
-class dApplication {
-public:
-	dApplication();
-	virtual ~dApplication();
+namespace doob {
 
-	void run();
-};
+	class dApplication {
+	public:
+		dApplication();
+		virtual ~dApplication();
 
-dApplication* createApplication();
+		void run();
+	};
+
+//dApplication* createApplication();
+}

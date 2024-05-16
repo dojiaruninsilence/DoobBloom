@@ -2,15 +2,18 @@
 
 #include "dUtils/dEvents/dInput.h"
 
-class dWindowsInput : public dInput {
-public:	
-	virtual void init() override;
+namespace doob {
 
-    virtual void shutdown() override;
+    class dWindowsInput : public dInput {
+    public:
+        virtual void init() override;
 
-    virtual bool isKeyPressed(const keyCode key) override;
+        virtual void shutdown() override;
 
-    virtual bool isMouseButtonPressed(const mouseCode button) override;
+        virtual bool isKeyPressed(const keyCode key) override;
 
-    virtual dMath::dVec2<float> getMousePosition() override;
-};
+        virtual bool isMouseButtonPressed(const mouseCode button) override;
+
+        virtual dMath::dVec2<float> getMousePosition() override;
+    };
+}
