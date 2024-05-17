@@ -27,4 +27,5 @@ int main() {
 		doob::testWindowSwapBuffer();
 
 	}
+	doob::shutdownGlfw();
 }

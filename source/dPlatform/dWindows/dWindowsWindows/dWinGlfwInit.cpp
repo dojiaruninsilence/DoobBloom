@@ -42,4 +42,8 @@ namespace doob {
 
         return true;
 	}
+
+    void shutdownGlfw() {
+        glfwTerminate();
+    }
 }

@@ -4,6 +4,10 @@
 
 namespace doob {
 
+	//void mainWindowCloseCallback(GLFWwindow* window);
+
+	//void secondaryWindowCloseCallback(GLFWwindow* window);
+
 	class dBaseWindow {
 	public:
 
@@ -11,7 +15,8 @@ namespace doob {
 
 		~dBaseWindow();
 
-		bool baseWindowCreate();
+
+		bool baseWindowCreate(bool main);
 
 		GLFWwindow* getWindow() { return window; }
 	private:

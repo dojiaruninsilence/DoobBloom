@@ -6,19 +6,11 @@
 
 namespace doob {
     dBaseWindow testWindow(400, 400, "bloom");
+    dBaseWindow testWindow2(400, 800, "2bloom");
 
 	void createTestWindow() {
-		testWindow.baseWindowCreate();
-
-        //while (!glfwWindowShouldClose(testWindow.getWindow())) {
-        //    // Poll for and process events
-        //    glfwPollEvents();
-
-        //    // Rendering commands here (if any)
-
-        //    // Swap buffers
-        //    glfwSwapBuffers(testWindow.getWindow());
-        //}
+        testWindow.baseWindowCreate(true);
+        testWindow2.baseWindowCreate(false);
 	}
 
     bool testWindowShouldClose() {
@@ -31,5 +23,8 @@ namespace doob {
 
     void testWindowSwapBuffer() {
         glfwSwapBuffers(testWindow.getWindow());
+        if (!glfwWindowShouldClose(testWindow2.getWindow())) {
+            glfwSwapBuffers(testWindow2.getWindow());
+        }
     }
 }

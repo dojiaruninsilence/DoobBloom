@@ -6,4 +6,6 @@ namespace doob {
 	void glfwErrorCallback(int error, const char* description);
 
 	bool initializeGlfw();
+
+	void shutdownGlfw();
 }
