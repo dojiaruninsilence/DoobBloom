@@ -20,7 +20,7 @@ namespace doob {
         // test
         std::cout << "Lets bring flowers to the world!" << std::endl;
 
-        dDiagnostics::dLog::Init();
+        dLog::Init();
 
         DB_TRACE("Lets bring flowers");
         DB_INFO("Lets bring flowers");
@@ -35,9 +35,9 @@ namespace doob {
         DB_FATAL_QUIET("Lets bring flowers");
 
         // Example of reporting an error
-        dDiagnostics::reportError(dDiagnostics::errorLevel::D_INFO, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
-        dDiagnostics::reportError(dDiagnostics::errorLevel::D_WARNING, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
-        dDiagnostics::reportError(dDiagnostics::errorLevel::D_ERROR, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+        reportError(errorLevel::D_INFO, errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+        reportError(errorLevel::D_WARNING, errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
+        reportError(errorLevel::D_ERROR, errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
         //dDiagnostics::reportError(dDiagnostics::errorLevel::D_FATAL, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
 
          // Test dVector with int type

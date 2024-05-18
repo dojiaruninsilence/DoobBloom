@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 
-namespace dDiagnostics {
+namespace doob {
 
 	// logging class
 	class dLog {
@@ -23,15 +23,15 @@ namespace dDiagnostics {
 }
 
 // logging macros
-#define DB_TRACE(...) ::dDiagnostics::dLog::GetLogger()->trace(__VA_ARGS__)
-#define DB_INFO(...) ::dDiagnostics::dLog::GetLogger()->info(__VA_ARGS__)
-#define DB_WARN(...) ::dDiagnostics::dLog::GetLogger()->warn(__VA_ARGS__)
-#define DB_ERROR(...) ::dDiagnostics::dLog::GetLogger()->error(__VA_ARGS__)
-#define DB_FATAL(...) ::dDiagnostics::dLog::GetLogger()->critical(__VA_ARGS__)
+#define DB_TRACE(...) ::doob::dLog::GetLogger()->trace(__VA_ARGS__)
+#define DB_INFO(...) ::doob::dLog::GetLogger()->info(__VA_ARGS__)
+#define DB_WARN(...) ::doob::dLog::GetLogger()->warn(__VA_ARGS__)
+#define DB_ERROR(...) ::doob::dLog::GetLogger()->error(__VA_ARGS__)
+#define DB_FATAL(...) ::doob::dLog::GetLogger()->critical(__VA_ARGS__)
 
-#define DB_TRACE_QUIET(...) ::dDiagnostics::dLog::GetLoggerQuiet()->trace(__VA_ARGS__)
-#define DB_INFO_QUIET(...) ::dDiagnostics::dLog::GetLoggerQuiet()->info(__VA_ARGS__)
-#define DB_WARN_QUIET(...) ::dDiagnostics::dLog::GetLoggerQuiet()->warn(__VA_ARGS__)
-#define DB_ERROR_QUIET(...) ::dDiagnostics::dLog::GetLoggerQuiet()->error(__VA_ARGS__)
-#define DB_FATAL_QUIET(...) ::dDiagnostics::dLog::GetLoggerQuiet()->critical(__VA_ARGS__)
+#define DB_TRACE_QUIET(...) ::doob::dLog::GetLoggerQuiet()->trace(__VA_ARGS__)
+#define DB_INFO_QUIET(...) ::doob::dLog::GetLoggerQuiet()->info(__VA_ARGS__)
+#define DB_WARN_QUIET(...) ::doob::dLog::GetLoggerQuiet()->warn(__VA_ARGS__)
+#define DB_ERROR_QUIET(...) ::doob::dLog::GetLoggerQuiet()->error(__VA_ARGS__)
+#define DB_FATAL_QUIET(...) ::doob::dLog::GetLoggerQuiet()->critical(__VA_ARGS__)
 

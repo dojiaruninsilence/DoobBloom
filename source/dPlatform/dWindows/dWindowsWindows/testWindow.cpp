@@ -3,6 +3,8 @@
 #include "testWindow.h"
 #include "dBaseWindow.h"
 
+#include "dUtils/dDiagnostics/dEventTesting.h"
+
 
 namespace doob {
     dBaseWindow testWindow(400, 400, "bloom");
@@ -11,6 +13,9 @@ namespace doob {
 	void createTestWindow() {
         testWindow.baseWindowCreate(true);
         testWindow2.baseWindowCreate(false);
+
+        glfwSetKeyCallback(testWindow.getWindow(), key_callback);
+        glfwSetKeyCallback(testWindow2.getWindow(), key_callback);
 	}
 
     bool testWindowShouldClose() {

@@ -5,7 +5,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-namespace dDiagnostics {
+namespace doob {
 
 	std::shared_ptr<spdlog::logger> dLog::s_logger;
 	std::shared_ptr<spdlog::logger> dLog::s_loggerQuiet;

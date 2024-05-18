@@ -15,7 +15,7 @@
 //}
 
 int main() {
-	dDiagnostics::dLog::Init();
+	doob::dLog::Init();
 	DB_INFO("did it work");
 	//printf("did it work");
 

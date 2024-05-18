@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace dDiagnostics {
+namespace doob {
 
 	// enum for error severity
 	enum class errorLevel {

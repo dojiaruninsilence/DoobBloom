@@ -1,6 +1,6 @@
 #include "dbpch.h"
 
-namespace dDiagnostics {
+namespace doob {
     // function to report errors
     void reportError(errorLevel errorLevel, errorCode code, const std::string& message, const char* sourceFile, int line) {
         // convert source file to a string
@@ -12,16 +12,16 @@ namespace dDiagnostics {
 
         // log error message using logging system
         switch (errorLevel) {
-        case dDiagnostics::errorLevel::D_INFO:
+        case errorLevel::D_INFO:
             DB_INFO_QUIET(errorMessage);
             break;
-        case dDiagnostics::errorLevel::D_WARNING:
+        case errorLevel::D_WARNING:
             DB_WARN(errorMessage);
             break;
-        case dDiagnostics::errorLevel::D_ERROR:
+        case errorLevel::D_ERROR:
             DB_ERROR(errorMessage);
             break;
-        case dDiagnostics::errorLevel::D_FATAL:
+        case errorLevel::D_FATAL:
             DB_FATAL(errorMessage);
             // shut down the application for fatal errors
             exit(EXIT_FAILURE);
