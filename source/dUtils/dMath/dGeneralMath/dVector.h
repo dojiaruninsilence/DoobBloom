@@ -1,6 +1,6 @@
 #pragma once
 
-namespace dMath {
+namespace doob {
     template <typename Type>
     class dVec2 {
     public:

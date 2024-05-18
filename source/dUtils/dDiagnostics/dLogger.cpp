@@ -24,7 +24,7 @@ namespace doob {
 		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFilePath, true);
 
 		// create a logger with both console and file sinks
-		dMath::dVector<spdlog::sink_ptr> sinks;
+		dVector<spdlog::sink_ptr> sinks;
 		sinks.push_back(console_sink);
 		sinks.push_back(file_sink);
 		//std::vector<spdlog::sink_ptr> sinks = { console_sink, file_sink };

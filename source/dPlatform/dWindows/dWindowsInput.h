@@ -14,6 +14,6 @@ namespace doob {
 
         virtual bool isMouseButtonPressed(const mouseCode button) override;
 
-        virtual dMath::dVec2<float> getMousePosition() override;
+        virtual dVec2<float> getMousePosition() override;
     };
 }

@@ -20,7 +20,7 @@ namespace doob {
 		return false;
 	}
 
-	dMath::dVec2<float> dWindowsInput::getMousePosition() {
+	dVec2<float> dWindowsInput::getMousePosition() {
 		return 0;
 	}
 }

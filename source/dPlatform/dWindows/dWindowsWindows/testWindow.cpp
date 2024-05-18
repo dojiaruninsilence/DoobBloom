@@ -7,6 +7,8 @@
 
 #include "dUtils/dDiagnostics/dEventTesting.h"
 
+#include "dUtils/dRenderUtils/dColors.h"
+
 #include <glad/glad.h>
 
 namespace doob {
@@ -36,7 +38,7 @@ namespace doob {
         int display_w, display_h;
         glfwGetFramebufferSize(testWindow.getWindow(), &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(0.25f, 0.75f, 0.20f, 1.00f);
+        dGlClearColor(dColors::olive);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(testWindow.getWindow());
 
@@ -44,7 +46,7 @@ namespace doob {
             glfwMakeContextCurrent(testWindow2.getWindow());
             glfwGetFramebufferSize(testWindow2.getWindow(), &display_w, &display_h);
             glViewport(0, 0, display_w, display_h);
-            glClearColor(0.15f, 0.85f, 0.10f, 1.00f);
+            dGlClearColor(dColors::yellowGreen);
             glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(testWindow2.getWindow());
         }

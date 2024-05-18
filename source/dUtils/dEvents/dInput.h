@@ -18,6 +18,6 @@ namespace doob {
 
 		virtual bool isMouseButtonPressed(mouseCode button) = 0;
 
-		virtual dMath::dVec2<float> getMousePosition() = 0;
+		virtual dVec2<float> getMousePosition() = 0;
 	};
 }

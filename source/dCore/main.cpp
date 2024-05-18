@@ -41,7 +41,7 @@ namespace doob {
         //dDiagnostics::reportError(dDiagnostics::errorLevel::D_FATAL, dDiagnostics::errorCode::RUNTIME_ERROR, "Invalid input", __FILE__, __LINE__);
 
          // Test dVector with int type
-        dMath::dVector<int> intVector;
+        dVector<int> intVector;
 
         // Test push_back
         intVector.push_back(4);
@@ -54,7 +54,7 @@ namespace doob {
         std::cout << "Maximum value in intVector: " << intVector.max() << std::endl;
 
         // Test dVector with double type
-        dMath::dVector<double> doubleVector;
+        dVector<double> doubleVector;
 
         // Test push_back
         doubleVector.push_back(3.5);
