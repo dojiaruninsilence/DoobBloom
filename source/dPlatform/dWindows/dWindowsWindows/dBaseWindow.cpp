@@ -17,6 +17,7 @@ namespace doob {
 
     dBaseWindow::dBaseWindow(int width, int height, const char* name)
         : window(nullptr), name(name), width(width), height(height) {
+        //DB_INFO("creating window: {0}", name);
     }
 
     dBaseWindow::~dBaseWindow() {
@@ -54,6 +55,7 @@ namespace doob {
         // Enable vertical sync (optional)
         glfwSwapInterval(1);
 
+        DB_INFO("creating window: {0}", name);
         return true;
 	}
 }

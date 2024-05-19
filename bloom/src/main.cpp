@@ -19,12 +19,18 @@ int main() {
 	DB_INFO("did it work");
 	//printf("did it work");
 
-	doob::initializeGlfw();
+	if (!doob::initializeGlfw()) {
+		DB_FATAL("Failed to initialize GLFW");
+		return -1;
+	}
+
 	doob::createTestWindow();
+	
+
 	while (!doob::testWindowShouldClose()) {
 		//DB_INFO("did it work");
-		doob::testWindowPoll();
 		doob::testWindowSwapBuffer();
+		doob::testWindowPoll();
 
 	}
 	doob::shutdownGlfw();
