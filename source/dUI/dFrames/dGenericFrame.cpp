@@ -23,6 +23,23 @@ namespace doob {
 
 	std::unique_ptr<dBaseWindow> genericFrame;
 
+	bool isFullscreen = false;
+	int windowX, windowY, windowWidth, windowHeight;
+
+	void toggleFullscreen(GLFWwindow* window) {
+		isFullscreen = !isFullscreen;
+		if (isFullscreen) {
+			glfwGetWindowPos(window, &windowX, &windowY);
+			glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+			const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
+		}
+		else {
+			glfwSetWindowMonitor(window, nullptr, windowX, windowY, windowWidth, windowHeight, 0);
+		}
+	}
+
 	void dGenericFrame::createGenericFrame() {
 		genericFrame = std::make_unique<dBaseWindow>();
 		genericFrame->baseWindowCreate(m_width, m_height, m_name, true);
@@ -105,6 +122,18 @@ namespace doob {
 		}
 
 		ImGui::Text("Custom Title Bar");
+
+		// Fullscreen Toggle Button
+		ImGui::SameLine(ImGui::GetWindowWidth() - 203); // Adjust the position
+		if (ImGui::Button("Fullscreen")) {
+			toggleFullscreen(genericFrame->getWindow());
+		}
+
+		// Minimize Button
+		ImGui::SameLine(ImGui::GetWindowWidth() - 120);
+		if (ImGui::Button("Minimize")) {
+			glfwIconifyWindow(genericFrame->getWindow());
+		}
 
 		ImGui::SameLine(io.DisplaySize.x - 50);
 		if (ImGui::Button("Close")) {
@@ -298,6 +327,8 @@ namespace doob {
 		ImGui::End();
 
 		ImGui::PopStyleColor();
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void dGenericFrame::genericFrameUpdateEnd() {
