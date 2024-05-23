@@ -11,18 +11,15 @@ namespace doob {
 	class dBaseWindow {
 	public:
 
-		dBaseWindow(int width, int height, const char* name);
+		dBaseWindow();
 
 		~dBaseWindow();
 
 
-		bool baseWindowCreate(bool main);
+		bool baseWindowCreate(int width, int height, const char* name, bool main);
 
 		GLFWwindow* getWindow() { return window; }
 	private:
-		int width;
-		int height;
-		const char* name;
 		GLFWwindow* window;
 	};
 }

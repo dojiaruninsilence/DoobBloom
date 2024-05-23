@@ -35,4 +35,24 @@ namespace doob {
 		EVENT_CLASS_TYPE(windowClose)
 		EVENT_CLASS_CATEGORY(window)
 	};
+
+	class dWindowMovedEvent : public dEvent {
+	public:
+		dWindowMovedEvent(int x, int y) : m_xPos(x), m_yPos(y) {}
+
+		inline int getX() const { return m_xPos; }
+		inline int getY() const { return m_yPos; }
+
+		std::string toString() const override {
+			std::stringstream ss;
+			ss << "dWindowMovedEvent: " << m_xPos << ", " << m_yPos;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(windowMoved)
+		EVENT_CLASS_CATEGORY(window)
+
+	private:
+		int m_xPos, m_yPos;
+	};
 }

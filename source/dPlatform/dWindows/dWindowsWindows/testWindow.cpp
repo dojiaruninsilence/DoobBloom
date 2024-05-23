@@ -23,8 +23,8 @@ namespace doob {
     //dBaseWindow testWindow2(400, 800, "2bloom");
 
 	void createTestWindow() {
-        testWindow = std::make_unique<dBaseWindow>(400, 400, "bloom");
-        testWindow->baseWindowCreate(true);
+        testWindow = std::make_unique<dBaseWindow>();
+        testWindow->baseWindowCreate(400, 400, "bloom", true);
         //testWindow2.baseWindowCreate(false);
 
         glfwSetKeyCallback(testWindow->getWindow(), key_callback);
@@ -55,9 +55,9 @@ namespace doob {
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
         //// Render your ImGui UI for the first window
-        //ImGui::Begin("Window 1");
-        //ImGui::Text("Hello from Window 1");
-        //ImGui::End();
+        ImGui::Begin("Window 1");
+        ImGui::Text("Hello from Window 1");
+        ImGui::End();
 
         ImGui::ShowDemoWindow();
 
@@ -100,5 +100,14 @@ namespace doob {
             //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
            // glfwSwapBuffers(testWindow2.getWindow());
        // }
+    }
+
+    void testWindowShutdown() {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+
+        glfwDestroyWindow(testWindow->getWindow());
+        
     }
 }

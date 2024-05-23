@@ -10,4 +10,6 @@ namespace doob {
 	void testWindowPoll();
 
 	void testWindowSwapBuffer();
+
+	void testWindowShutdown();
 }

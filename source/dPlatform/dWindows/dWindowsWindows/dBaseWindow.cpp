@@ -15,24 +15,24 @@ namespace doob {
 
     }
 
-    dBaseWindow::dBaseWindow(int width, int height, const char* name)
-        : window(nullptr), name(name), width(width), height(height) {
+    dBaseWindow::dBaseWindow() {
         //DB_INFO("creating window: {0}", name);
     }
 
     dBaseWindow::~dBaseWindow() {
         if (window) {
-            glfwDestroyWindow(window);
+            //glfwDestroyWindow(window);
             //glfwTerminate();
         }
     }
 
-	bool dBaseWindow::baseWindowCreate(bool main) {
+	bool dBaseWindow::baseWindowCreate(int width, int height, const char* name, bool main) {
         // Set GLFW window hints (optional)
         // For example, to use OpenGL 3.3 core profile
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
         // Create a GLFW window
         window = glfwCreateWindow(width, height, name, NULL, NULL);

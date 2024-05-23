@@ -24,14 +24,37 @@ int main() {
 		return -1;
 	}
 
-	doob::createTestWindow();
+	//doob::createTestWindow();
+	/*doob::testFrame mainFrame(400, 800, "Doob Bloom");
+	mainFrame.createTestFrame();*/
+	doob::dGenericFrame mainFrame(400, 800, "Doob Bloom");
+	mainFrame.createGenericFrame();
 	
+	bool isRunning = true;
 
-	while (!doob::testWindowShouldClose()) {
+	while (isRunning) {
 		//DB_INFO("did it work");
-		doob::testWindowSwapBuffer();
-		doob::testWindowPoll();
+		//doob::testWindowSwapBuffer();
+		//doob::testWindowPoll();
+
+		/*mainFrame.testFrameUpdateBegin();
+		mainFrame.testFrameUpdateEnd();
+
+		if (mainFrame.testFrameShouldClose()) {
+			isRunning = false;
+			mainFrame.testFrameShutdown();
+		}*/
+
+		mainFrame.genericFrameUpdateBegin();
+		mainFrame.genericFrameUpdateEnd();
+
+		if (mainFrame.genericFrameShouldClose()) {
+			isRunning = false;
+			mainFrame.genericFrameShutdown();
+		}
 
 	}
 	doob::shutdownGlfw();
+
+	return 0;
 }
