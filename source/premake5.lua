@@ -31,7 +31,8 @@ project "DoobBloom"
         "%{wks.location}/vendor/spdlog/include",
         "%{IncludeDir.glfw}",
         "%{IncludeDir.glad}",
-        "%{IncludeDir.imgui}"
+        "%{IncludeDir.imgui}",
+        "%{IncludeDir.portAudio}"
     }
 
     links
@@ -39,6 +40,7 @@ project "DoobBloom"
         "glfw",
         "glad",
         "imgui",
+        "portAudio",
         "opengl32.lib",
         "dwmapi.lib"
     } 

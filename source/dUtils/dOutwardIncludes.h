@@ -5,6 +5,8 @@
 
 #include "dUI/dFrames/dGenericFrame.h"
 
+#include "dUI/dPanes/dGenericPane.h"
+
 #include "dUtils/dDiagnostics/dLogger.h"
 #include "dUtils/dDiagnostics/dErrKit.h"
 #include "dUtils/dDiagnostics/dAssert.h"

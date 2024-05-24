@@ -17,10 +17,12 @@ workspace "DoobBloom"
     IncludeDir["glfw"] = "%{wks.location}/vendor/glfw/include"
     IncludeDir["glad"] = "%{wks.location}/vendor/glad/include"
     IncludeDir["imgui"] = "%{wks.location}/vendor/imgui"
+    IncludeDir["portAudio"] = "%{wks.location}/vendor/portaudio/include"
 
     include "vendor/glfw"
     include "vendor/glad"
     include "vendor/imgui"
+    include "vendor/portaudio"
 
     include "source"
     include "bloom"

@@ -28,6 +28,7 @@ int main() {
 	/*doob::testFrame mainFrame(400, 800, "Doob Bloom");
 	mainFrame.createTestFrame();*/
 	doob::dGenericFrame mainFrame(400, 800, "Doob Bloom");
+	doob::dGenericPane mainPane;
 	mainFrame.createGenericFrame();
 	
 	bool isRunning = true;
@@ -46,6 +47,7 @@ int main() {
 		}*/
 
 		mainFrame.genericFrameUpdateBegin();
+		mainPane.genericPaneUpdate();
 		mainFrame.genericFrameUpdateEnd();
 
 		if (mainFrame.genericFrameShouldClose()) {
