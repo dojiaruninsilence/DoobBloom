@@ -123,36 +123,13 @@ static void StreamFinished( void* userData )
     printf( "Stream Completed: %s\n", data->message );
 }
 
-/**
- * @return paNoError if successful, otherwise a negative error.
- */
-static PaError CheckActiveStopped(PaStream *stream,
-                                  PaError expectedActive,
-                                  PaError expectedStopped,
-                                  int lineNumber)
-{
-    PaError testResult = paNoError;
-    PaError actualActive = Pa_IsStreamActive(stream);
-    if (expectedActive != actualActive) {
-        printf("ERROR at line %d - active is %d, expected %d\n",
-               lineNumber, actualActive, expectedActive);
-        testResult = (actualActive < 0) ? actualActive : paInternalError;
-    }
-    PaError actualStopped = Pa_IsStreamStopped(stream);
-    if (expectedStopped != actualStopped) {
-        printf("ERROR at line %d - stopped is %d, expected %d\n",
-               lineNumber, actualStopped, expectedStopped);
-        testResult = (actualStopped < 0) ? actualStopped : paInternalError;
-    }
-    return testResult;
-}
 
 /*----------------------------------------------------------------------------*/
 int main(void);
 int main(void)
 {
     PaStreamParameters outputParameters;
-    PaStream *stream = NULL;
+    PaStream *stream;
     PaError err;
     TestData data;
     int i, j;
@@ -170,7 +147,7 @@ int main(void)
     err = Pa_Initialize();
     if( err != paNoError ) goto error;
 
-    outputParameters.device = Pa_GetDefaultOutputDevice();
+    outputParameters.device                    = Pa_GetDefaultOutputDevice();
     if (outputParameters.device == paNoDevice) {
         fprintf(stderr,"Error: No default output device.\n");
         goto error;
@@ -195,7 +172,6 @@ int main(void)
     err = Pa_SetStreamFinishedCallback( stream, &StreamFinished );
     if( err != paNoError ) goto error;
 
-
     printf("Repeating test %d times.\n", NUM_LOOPS );
 
     for( i=0; i < NUM_LOOPS; ++i )
@@ -206,12 +182,8 @@ int main(void)
         data.callbackInvokedAfterReturningPaComplete = 0;
         sprintf( data.message, "Loop: %d", i );
 
-        if( (err = CheckActiveStopped(stream, 0, 1, __LINE__)) < 0 ) goto error;
-
         err = Pa_StartStream( stream );
         if( err != paNoError ) goto error;
-
-        if( (err = CheckActiveStopped(stream, 1, 0, __LINE__)) < 0 ) goto error;
 
         printf("Play for %d seconds.\n", NUM_SECONDS );
 
@@ -256,13 +228,9 @@ int main(void)
             printf( "TEST FAILED: Callback was invoked after returning paComplete.\n" );
         }
 
-        /* Stream should not be "stopped" until Pa_StopStream() called. */
-        if( (err = CheckActiveStopped(stream, 0, 0, __LINE__)) < 0 ) goto error;
 
         err = Pa_StopStream( stream );
         if( err != paNoError ) goto error;
-
-        if( (err = CheckActiveStopped(stream, 0, 1, __LINE__)) < 0 ) goto error;
 
         printf( "sleeping for 1 second...\n" );
         Pa_Sleep( 1000 );
@@ -276,10 +244,6 @@ int main(void)
 
     return err;
 error:
-    if( stream != NULL )
-    {
-        Pa_CloseStream( stream );
-    }
     Pa_Terminate();
     fprintf( stderr, "An error occurred while using the portaudio stream\n" );
     fprintf( stderr, "Error number: %d\n", err );

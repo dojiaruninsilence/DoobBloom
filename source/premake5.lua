@@ -29,10 +29,12 @@ project "DoobBloom"
         "%{wks.location}/source",
         "%{wks.location}/source/dUtils",
         "%{wks.location}/vendor/spdlog/include",
+        "%{wks.location}/vendor/rtaudio",
         "%{IncludeDir.glfw}",
         "%{IncludeDir.glad}",
         "%{IncludeDir.imgui}",
-        "%{IncludeDir.portAudio}"
+        "%{IncludeDir.portAudio}",
+        "%{IncludeDir.rtAudio}"
     }
 
     links
@@ -41,6 +43,7 @@ project "DoobBloom"
         "glad",
         "imgui",
         "portAudio",
+        "rtAudio",
         "opengl32.lib",
         "dwmapi.lib"
     } 

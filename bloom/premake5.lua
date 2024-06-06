@@ -36,8 +36,10 @@ project "bloom"
     filter "system:windows"
 		systemversion "latest"
 
+        links { "winmm", "ole32" }
+
 	filter "configurations:Debug"
-		defines "DB_DEBUG"
+		defines { "DB_DEBUG", "__RTAUDIO_DEBUG__" }
 		runtime "Debug"
 		symbols "on"
 

@@ -45,12 +45,9 @@
 #include <math.h>
 #include "portaudio.h"
 /*
- * Simulate a guitar distortion pedal.
- * Record mono input and output clean and processed stereo output.
- *
- * Note that many of the older ISA sound cards on PCs do NOT support
- * full duplex audio (simultaneous record and playback).
- * And some only support full duplex at lower sample rates.
+** Note that many of the older ISA sound cards on PCs do NOT support
+** full duplex audio (simultaneous record and playback).
+** And some only support full duplex at lower sample rates.
 */
 #define SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
@@ -115,9 +112,8 @@ static int fuzzCallback( const void *inputBuffer, void *outputBuffer,
     {
         for( i=0; i<framesPerBuffer; i++ )
         {
-            SAMPLE sample = *in++; /* MONO input */
-            *out++ = FUZZ(sample); /* left - distorted */
-            *out++ = sample;       /* right - clean */
+            *out++ = FUZZ(*in++);  /* left - distorted */
+            *out++ = *in++;          /* right - clean */
         }
     }
 
@@ -140,7 +136,7 @@ int main(void)
         fprintf(stderr,"Error: No default input device.\n");
         goto error;
     }
-    inputParameters.channelCount = 1;       /* mono input */
+    inputParameters.channelCount = 2;       /* stereo input */
     inputParameters.sampleFormat = PA_SAMPLE_TYPE;
     inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
     inputParameters.hostApiSpecificStreamInfo = NULL;

@@ -59,9 +59,9 @@
 typedef struct
 {
     short sine[TABLE_SIZE];
-    int   phases[MAX_CHANNELS];
-    int   numChannels;
-    int   sampsToGo;
+    int32_t phases[MAX_CHANNELS];
+    int32_t numChannels;
+    int32_t sampsToGo;
 }
 paTestData;
 

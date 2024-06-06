@@ -2,6 +2,8 @@
 
 #include "dGenericFrame.h"
 
+#include "doobEngine/testAudio.h"
+
 #include "dPlatform/dWindows/dWindowsWindows/dBaseWindow.h"
 
 #include "dRenderer/dGladInit.h"
@@ -22,6 +24,7 @@
 namespace doob {
 
 	std::unique_ptr<dBaseWindow> genericFrame;
+	std::unique_ptr<testAudio> audio;
 
 	bool isFullscreen = false;
 	int windowX, windowY, windowWidth, windowHeight;
@@ -47,6 +50,10 @@ namespace doob {
 		initializeGlad();
 		initializeImgui();
 
+		audio = std::make_unique<testAudio>();
+
+		audio->initialize();
+
 		ImGui_ImplGlfw_InitForOpenGL(genericFrame->getWindow(), true);
 		ImGui_ImplOpenGL3_Init("#version 130");
 	}
@@ -56,6 +63,9 @@ namespace doob {
 	}
 
 	void dGenericFrame::genericFrameUpdateBegin() {
+
+		audio->start();
+
 		glfwMakeContextCurrent(genericFrame->getWindow());
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -352,6 +362,8 @@ namespace doob {
 		glfwSwapBuffers(genericFrame->getWindow());
 
 		glfwPollEvents();
+
+		audio->stop();
 	}
 
 	void dGenericFrame::genericFrameShutdown() {

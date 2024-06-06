@@ -9,17 +9,22 @@ project "portAudio"
 
 	files
 	{
-		"src/common/*.c",
-        "src/hostapi/wasapi/*.c",
-        "src/os/win/*.c",
-        "src/*.c"
+		"src/common/**.c",
+        "src/hostapi/wasapi/**.c",
+        "src/hostapi/dsound**.c",
+        "src/hostapi/asio**.c",
+        "src/hostapi/wdmks**.c",
+        "src/hostapi/wmme**.c",
+        "src/os/win/**.c",
+        "src/*.c",
+		"src/**.h"
 	}
 
 	includedirs 
 	{
 		"include",
 		"src/common",
-		"src/hostapi",
+		"src/hostapi/",
 		"src/os/win"
 	}
 
@@ -37,6 +42,7 @@ project "portAudio"
 		cppdialect "C++17"
 
 	filter "configurations:Debug"
+		defines { "PA_ENABLE_DEBUG_OUTPUT" }
 		runtime "Debug"
 		symbols "on"
 

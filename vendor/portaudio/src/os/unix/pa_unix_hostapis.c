@@ -43,11 +43,8 @@
 #include "pa_hostapi.h"
 
 PaError PaJack_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
-PaError PaPulseAudio_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
 PaError PaAlsa_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
-PaError PaSndio_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
 PaError PaOSS_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
-PaError PaAudioIO_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
 /* Added for IRIX, Pieter, oct 2, 2003: */
 PaError PaSGI_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex index );
 /* Linux AudioScience HPI */
@@ -66,19 +63,11 @@ PaUtilHostApiInitializer *paHostApiInitializers[] =
         PaAlsa_Initialize,
 #endif
 
-#ifdef PA_USE_SNDIO
-        PaSndio_Initialize,
-#endif
-
 #if PA_USE_OSS
         PaOSS_Initialize,
 #endif
 
 #else   /* __linux__ */
-
-#ifdef PA_USE_SNDIO
-        PaSndio_Initialize,
-#endif
 
 #if PA_USE_OSS
         PaOSS_Initialize,
@@ -89,10 +78,6 @@ PaUtilHostApiInitializer *paHostApiInitializers[] =
 #endif
 
 #endif  /* __linux__ */
-
-#if PA_USE_AUDIOIO
-        PaAudioIO_Initialize,
-#endif
 
 #if PA_USE_JACK
         PaJack_Initialize,
@@ -108,10 +93,6 @@ PaUtilHostApiInitializer *paHostApiInitializers[] =
 
 #if PA_USE_COREAUDIO
         PaMacCore_Initialize,
-#endif
-
-#if PA_USE_PULSEAUDIO
-        PaPulseAudio_Initialize,
 #endif
 
 #if PA_USE_SKELETON

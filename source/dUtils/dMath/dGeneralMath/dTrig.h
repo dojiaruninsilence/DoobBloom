@@ -10,45 +10,44 @@ namespace doob {
 		~dTrig() {}
 
         // function to convert degrees to radians
-        Type degreeToRadians(Type angleDegrees) {
+        static Type degreeToRadians(Type angleDegrees) {
             return angleDegrees * static_cast<Type>(D_PI) / static_cast<Type>(180.0);
         }
 
         // function to convert radians to degrees
-        Type radianToDegrees(Type angleRadians) {
+        static Type radianToDegrees(Type angleRadians) {
             return angleRadians * static_cast<Type>(180.0) / static_cast<Type>(D_PI);
 
         }
 
         // function to compute the sine of an angle in radians
-        Type sin(Type angleRadians) {
+        static Type sin(Type angleRadians) {
             return std::sin(angleRadians);
         }
 
         // function to compute the sine of an angle in degrees
-        Type sinDegrees(Type angleDegrees) {
-            return std::sin(angleRadians);
+        static Type sinDegrees(Type angleDegrees) {
+            return std::sin(degreeToRadians(angleDegrees));
         }
 
         // function to compute the cosine of an angle in radians
-        Type cos(Type angleRadians) {
+        static Type cos(Type angleRadians) {
             return std::cos(angleRadians);
         }
 
         // function to compute the cosine of an angle in degrees
-        Type cosDegrees(Type angleDegrees) {
-            return std::cos(angleRadians);
+        static Type cosDegrees(Type angleDegrees) {
+            return std::cos(degreeToRadians(angleDegrees));
         }
 
         // function to compute the tangent of an angle in radians
-        Type tan(Type angleRadians) {
+        static Type tan(Type angleRadians) {
             return std::tan(angleRadians);
         }
 
         // function to compute the tangent of an angle in degrees
-        Type tanDegrees(Type angleDegrees) {
-            Type angleRadians = degreeToRadians(angleDegrees);
-            return std::tan(angleRadians);
+        static Type tanDegrees(Type angleDegrees) {
+            return std::tan(degreeToRadians(angleDegrees));
         }
 	};
 }
