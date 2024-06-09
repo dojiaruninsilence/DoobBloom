@@ -30,6 +30,16 @@ namespace doob {
             return std::sin(degreeToRadians(angleDegrees));
         }
 
+        // fuction to compute the arc(inverse) sine of an angle in degrees
+        static Type asin(Type angleRadians) {
+            return std::asin(angleRadians);
+        }
+
+        // fuction to compute the arc(inverse) sine of an angle in degrees
+        static Type asinDegrees(Type angleDegrees) {
+            return std::asin(degreeToRadians(angleDegrees));
+        }
+
         // function to compute the cosine of an angle in radians
         static Type cos(Type angleRadians) {
             return std::cos(angleRadians);
@@ -48,6 +58,16 @@ namespace doob {
         // function to compute the tangent of an angle in degrees
         static Type tanDegrees(Type angleDegrees) {
             return std::tan(degreeToRadians(angleDegrees));
+        }
+
+        // function to compute the arc(inverse) tangent of an angle in radians
+        static Type atan(Type angleRadians) {
+            return std::atan(angleRadians);
+        }
+
+        // function to compute the arc(inverse) tangent of an angle in degrees
+        static Type atanDegrees(Type angleDegrees) {
+            return std::atan(degreeToRadians(angleDegrees));
         }
 	};
 }
