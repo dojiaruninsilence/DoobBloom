@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <algorithm>
+
 namespace doob {
     template <typename Type>
     class dVec2 {
@@ -39,7 +42,62 @@ namespace doob {
         // destructor
         ~dVector() { delete[] data; }
 
+        // copy constructor
+        /*dVector(const dVector& other) {
+            size = other.size;
+            capacity = other.capacity;
+            data = new Type[capacity];
+            for (size_t i = 0; i < size; ++i) {
+                data[i] = other.data[i];
+            }
+        }*/
+
+        // move constructor
+        dVector(dVector&& other) noexcept {
+            size = other.size;
+            capacity = other.capacity;
+            data = other.data;
+            other.size = 0;
+            other.capacity = 0;
+            other.data = nullptr;
+        }
+
+        // copy assignment operator
+        /*dVector& operator=(const dVector& other) {
+            if (this != &other) {
+                delete[] data;
+                size = other.size;
+                capacity = other.capacity;
+                data = new Type[capacity];
+                for (size_t i = 0; i < size; ++i) {
+                    data[i] = other.data[i];
+                }
+            }
+            return *this;
+        }*/
+
+        // move assignment operator
+        dVector& operator=(dVector&& other) noexcept {
+            if (this != &other) {
+                delete[] data;
+                size = other.size;
+                capacity = other.capacity;
+                data = other.data;
+                other.size = 0;
+                other.capacity = 0;
+                other.data = nullptr;
+            }
+            return *this;
+        }
+
         // method to add an element to the end of the vector
+        void push_back(Type&& value) {
+            if (size >= capacity) {
+                reserve(capacity == 0 ? 1 : capacity * 2);
+            }
+            data[size++] = std::move(value);
+        }
+
         void push_back(const Type& value) {
             if (size >= capacity) {
                 reserve(capacity == 0 ? 1 : capacity * 2);
@@ -55,7 +113,7 @@ namespace doob {
 
         void push_back(const dVector<Type>& otherVector) {
             for (size_t i = 0; i < otherVector.getSize(); ++i) {
-                push_back(otherVector[i]);
+                push_back(std::move(otherVector[i]));
             }
         }
 
@@ -64,7 +122,7 @@ namespace doob {
             if (newCapacity > capacity) {
                 Type* newData = new Type[newCapacity];
                 for (size_t i = 0; i < size; ++i) {
-                    newData[i] = data[i];
+                    newData[i] = std::move(data[i]);
                 }
                 delete[] data;
                 data = newData;
@@ -175,6 +233,16 @@ namespace doob {
         // method to access elements by index
         Type& operator[](size_t index) { return data[index]; }
         const Type& operator[](size_t index) const { return data[index]; }
+
+        // method to erase an element by index
+        void erase(size_t index) {
+            if (index < size) {
+                for (size_t i = index; i < size - 1; ++i) {
+                    data[i] = std::move(data[i + 1]);
+                }
+                --size;
+            }
+        }
 
     private:
         Type* data; // Pointer to the dynamic array holding the elements

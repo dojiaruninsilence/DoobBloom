@@ -2,7 +2,10 @@
 
 #include "dGenericFrame.h"
 
+#include "dNoiseGens/dSineWaveGen.h"
+
 #include "doobEngine/testAudio.h"
+#include "doobEngine/dEngine.h"
 
 #include "dPlatform/dWindows/dWindowsWindows/dBaseWindow.h"
 
@@ -24,7 +27,10 @@
 namespace doob {
 
 	std::unique_ptr<dBaseWindow> genericFrame;
-	std::unique_ptr<testAudio> audio;
+	//std::unique_ptr<testAudio> audio;
+
+	std::unique_ptr<dEngine> audio;
+	std::unique_ptr<dVoice> voice;
 
 	bool isFullscreen = false;
 	int windowX, windowY, windowWidth, windowHeight;
@@ -50,9 +56,15 @@ namespace doob {
 		initializeGlad();
 		initializeImgui();
 
-		audio = std::make_unique<testAudio>();
+		voice = std::make_unique<dVoice>();
+		voice->addSound(std::make_unique<dSineWaveGen>(300, 44100));
+
+		std::string name = "testSineWave";
+
+		audio = std::make_unique<dEngine>(4096, 2, name);
 
 		audio->initialize();
+		audio->addVoice(std::move(voice));
 
 		ImGui_ImplGlfw_InitForOpenGL(genericFrame->getWindow(), true);
 		ImGui_ImplOpenGL3_Init("#version 130");
