@@ -19,7 +19,8 @@ namespace doob {
 		INITIALIZATION_ERROR,
 		RUNTIME_ERROR,
 		INPUT_VALIDATION_ERROR,
-		FILE_IO_ERROR
+		FILE_IO_ERROR,
+		OUT_OF_BOUNDS
 	};
 
 	void reportError(errorLevel errorLevel, errorCode code, const std::string& message, const char* sourceFile, int line);

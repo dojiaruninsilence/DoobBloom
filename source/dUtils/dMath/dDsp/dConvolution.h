@@ -1,21 +1,36 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include "dUtils/dMath/dDsp/dFft.h"
 
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 #include "dUtils/dMath/dGeneralMath/dVectorComplex.h"
 
 namespace doob {
+
+    // @class dConvolution
+    // @brief Provides static methods for performing various types of convolutions on signals.
+    // @tparam Type The type of elements in the signal and kernel.
     template <typename Type>
     class dConvolution {
     public:
-        // perform linear convolution between two signals
+        // @brief Perform linear convolution between two signals.
+        // @param signal The input signal vector.
+        // @param kernel The kernel vector.
+        // @return The result of the linear convolution.
         static dVector<Type> linearConvolution(
             const dVector<Type>& signal,
             const dVector<Type>& kernel) {
 
             size_t signalSize = signal.getSize();
             size_t kernelSize = kernel.getSize();
+
+            if (signalSize == 0 || kernelSize == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Signal or kernel size is zero.", __FILE__, __LINE__);
+            }
+
             size_t convSize = signalSize + kernelSize - 1;
 
             dVector<Type> result(convSize, Type(0));
@@ -31,11 +46,21 @@ namespace doob {
             return result;
         }
 
+        // @brief Perform overlap-add convolution between two signals.
+        // @param signal The input signal vector.
+        // @param kernel The kernel vector.
+        // @return The result of the overlap - add convolution.
         static dVector<Type> overlapAddConvolution(
             const dVector<Type>& signal,
             const dVector<Type>& kernel) {
+
             size_t signalSize = signal.getSize();
             size_t kernelSize = kernel.getSize();
+
+            if (signalSize == 0 || kernelSize == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Signal or kernel size is zero.", __FILE__, __LINE__);
+            }
 
             // compute the segment size (usually chosen as a power of 2 for fft efficiency)
             size_t segmentSize = 64; // choose an appropriate segment size
@@ -77,12 +102,21 @@ namespace doob {
             return convolvedSignal;
         }
 
-        // perform overlap add convolution using fft
+        // @brief Perform overlap-add convolution using FFT.
+        // @param signal The input signal vector.
+        // @param kernel The kernel vector.
+        // @return The result of the FFT - based convolution.
         static dVector<Type> fftConvolution(
             const dVector<Type>& signal,
             const dVector<Type>& kernel) {
+
             size_t signalSize = signal.getSize();
             size_t kernelSize = kernel.getSize();
+
+            if (signalSize == 0 || kernelSize == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Signal or kernel size is zero.", __FILE__, __LINE__);
+            }
 
             // compute the size of the fft (next power of two for efficiency)
             size_t fftSize = 1;

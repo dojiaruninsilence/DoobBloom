@@ -7,7 +7,9 @@
 #include "dUtils/dMath/dGeneralMath/dVectorComplex.h"
 
 namespace doob {
-    // enum to define filter types
+    
+    // @enum filterType
+    // @brief enum to define different types of filters.
     enum class FilterType {
         LOW_PASS,
         HIGH_PASS,
@@ -18,7 +20,10 @@ namespace doob {
     template <typename Type>
     class dIirFilt {
     public:
-        // constructor
+        // @brief constructor to initialize the filter with given type, cutoff frequency, and resonance.
+        // @param type the type of the filter.
+        // @param cutoffFreq the cutoff frequency of the filter.
+        // @param resonance the resonance of the filter.
         dIirFilt(FilterType type, Type cutoffFreq, Type resonance) : filterType(type) {
 
             // initialize filter coefficients and state variables
@@ -27,10 +32,13 @@ namespace doob {
             yHistory.resize(aCoefficients.size() - 1, Type(0)); // resize yHistory to match the filter order
         }
 
-        // destructor
+        // @brief Destructor
         ~dIirFilt() {}
 
-        // method to set filter coefficients based on type, cutoff frequency, and resonance
+        // @brief method to set filter coefficients based on type, cutoff frequency, and resonance.
+        // @param type the type of the filter.
+        // @param cutoffFreq the cutoff frequency of the filter.
+        // @param resonance the resonance of the filter.
         void setFilterCoefficients(FilterType type, Type cutoffFreq, Type resonance) {
 
             filterType = type;
@@ -40,7 +48,9 @@ namespace doob {
             yHistory.resize(aCoefficients.size() - 1, Type(0));
         }
 
-        // methos to process a single sample through the filter
+        // @brief method to process a single sample through the filter.
+        // @param input the input sample.
+        // @return the filtered output sample.
         Type processSample(Type input) {
 
             // update the filter state with the new input sample
@@ -51,7 +61,9 @@ namespace doob {
             return output;
         }
 
-        // method to process a block of samples through the filter
+        // @brief method to process a block of samples through the filter.
+        // @param input the vector of input samples.
+        // @return a vector of filtered output samples.
         dVector<Type> processBlock(const dVector<Type>& input) {
             // create a vector to store the output samples
             dVector<Type> outputBlock(input.size());
@@ -73,10 +85,12 @@ namespace doob {
         void analyzeFreqResponse();
 
     private:
-        // Private functions for filter calculation
+        // @brief calculate the output sample using the difference equation.
+        // @param input the input sample.
+        // @return the output sample.
         Type calculateOutputSample(Type input) {
 
-            // Calculate the output sample using the difference equation
+            // calculate the output sample using the difference equation
             Type output = static_cast<Type>(0.0);
             for (size_t i = 0; i < bCoefficients.size(); ++i) {
                 output += bCoefficients[i] * xHistory[i];
@@ -88,6 +102,8 @@ namespace doob {
             return output;
         }
 
+        // @brief update the filter state with the new input sample.
+        // @param input the input sample.
         void updateFilterState(Type input) {
 
             // shift the input history
@@ -106,7 +122,10 @@ namespace doob {
             yHistory[0] = output;
         }
 
-        // coefficient calculation methods
+        // @brief Calculate the filter coefficients based on filter type, cutoff frequency, and resonance.
+        // @param type The type of the filter.
+        // @param cutoffFreq The cutoff frequency of the filter.
+        // @param resonance The resonance of the filter.
         void calculateCoefficients(FilterType type, Type cutoffFreq, Type resonance) {
             // calc coefficients based on filter type, cutoff freq, and resonance
             switch (type) {
@@ -127,11 +146,15 @@ namespace doob {
                 aCoefficients = calculateDenominatorCoefficients(cutoffFreq, resonance);
                 break;
             default:
-                break;
+                // Log an error if the filter type is unknown
+                reportError(errorLevel::D_ERROR, errorCode::INVALID_ARGUMENT, "Unknown filter type.", __FILE__, __LINE__);
             }
         }
 
-        // lowpass coefficient calculation method
+        // @brief calculate the low-pass filter coefficients.
+        // @param cutoffFreq the cutoff frequency.
+        // @param resonance the resonance.
+        // @return a vector of filter coefficients.
         dVector<Type> calculateLowPassCoefficients(Type cutoffFreq, Type resonance) {
 
             // butterworth filter design
@@ -165,7 +188,10 @@ namespace doob {
             return coefficients;
         }
 
-        // highpass coefficient calculation method
+        // @brief calculate the high-pass filter coefficients.
+        // @param cutoffFreq the cutoff frequency.
+        // @param resonance the resonance.
+        // @return a vector of filter coefficients.
         dVector<Type> calculateHighPassCoefficients(Type cutoffFreq, Type resonance) {
             // butterworth filter design
             const int order = 4; // filter order (adjust as needed)
@@ -199,7 +225,10 @@ namespace doob {
             return coefficients;
         }
 
-        // bandpass coefficient calculation method
+        // @brief calculate the band-pass filter coefficients.
+        // @param cutoffFreq the cutoff frequency.
+        // @param resonance the resonance.
+        // @return a vector of filter coefficients.
         dVector<Type> calculateBandPassCoefficients(Type cutoffFreq, Type resonance) {
             // butterworth filter design
             const int order = 4; // filter order (adjust as needed)
@@ -233,7 +262,10 @@ namespace doob {
             return coefficients;
         }
 
-        // bandstop coefficient calculation method
+        // @brief calculate the band-stop filter coefficients.
+        // @param cutoffFreq the cutoff frequency.
+        // @param resonance the resonance.
+        // @return a vector of filter coefficients.
         dVector<Type> calculateBandStopCoefficients(Type cutoffFreq, Type resonance) {
             // butterworth filter design
             const int order = 4; // filter order (adjust as needed)
@@ -266,7 +298,10 @@ namespace doob {
             return coefficients;
         }
 
-        // denominator coefficient calculattion method
+        // @brief calculate the denominator coefficients for the filter.
+        // @param cutoffFreq the cutoff frequency.
+        // @param resonance the resonance.
+        // @return a vector of denominator coefficients.
         dVector<Type> calculateDenominatorCoefficients(Type cutoffFreq, Type resonance) {
             // butterworth filter design
             const int order = 4; // Filter order (adjust as needed)

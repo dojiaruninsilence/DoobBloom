@@ -1,16 +1,34 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include "dUtils/dMath/dGeneralMath/dSqrRtAbsFunctions.h"
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 
 #include <algorithm>
 
 namespace doob {
+
+    
+    // @class dStats
+    // @brief statistical functions for vectors.    
+    // this class provides static methods to calculate various statistical measures such as mean,
+    // standard deviation, variance, median, mode, and range for vectors.
+    // @tparam Type The type of elements in the vector.
     template <typename Type>
     class dStats {
     public:
-        // function to calculate the mean of a vector
+
+        // @brief calculate the mean of a vector. 
+        // @param vector The input vector.
+        // @return the mean of the vector.
         static Type mean(const dVector<Type>& vector) {
+
+            if (vector.getSize() == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Vector size is zero.", __FILE__, __LINE__);
+            }
+
             Type sum = 0;
             for (size_t i = 0; i < vector.getSize(); ++i) {
                 sum += vector[i];
@@ -18,8 +36,16 @@ namespace doob {
             return sum / vector.getSize();
         }
 
-        // function to calculate the standard deviation of a vector
+        // @brief calculate the standard deviation of a vector.
+        // @param vector The input vector.
+        // @return the standard deviation of the vector.
         static Type standardDeviation(const dVector<Type>& vector) {
+
+            if (vector.getSize() == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Vector size is zero.", __FILE__, __LINE__);
+            }
+
             Type meanValue = mean(vector);
             Type sum = 0;
             for (size_t i = 0; i < vector.getSize(); ++i) {
@@ -28,8 +54,16 @@ namespace doob {
             return dSqrRtAbsFunctions<Type>::sqrt(sum / vector.getSize());
         }
 
-        // function to calculate the variance of a vector
+        // @brief calculate the variance of a vector.
+        // @param vector The input vector.
+        // @return the variance of the vector.
         static Type variance(const dVector<Type>& vector) {
+
+            if (vector.getSize() == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Vector size is zero.", __FILE__, __LINE__);
+            }
+
             Type meanValue = mean(vector);
             Type sum = 0;
             for (size_t i = 0; i < vector.getSize(); ++i) {
@@ -38,8 +72,16 @@ namespace doob {
             return sum / vector.getSize();
         }
 
-        // function to calculate the median of a vector
+        // @brief calculate the median of a vector.        
+        // @param vector The input vector.
+        // @return the median of the vector.
         static Type median(const dVector<Type>& vector) {
+
+            if (vector.getSize() == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Vector size is zero.", __FILE__, __LINE__);
+            }
+
             dVector<Type> sortedVector = vector;
             std::sort(sortedVector.data, sortedVector.data + sortedVector.size);
 
@@ -54,8 +96,16 @@ namespace doob {
             }
         }
 
-        // function to calculate the modes of a verctor
+        // @brief calculate the modes of a vector.        
+        // @param vector The input vector.
+        // @return a vector containing the mode(s) of the input vector.
         static dVector<Type> mode(const dVector<Type>& vector) {
+
+            if (vector.getSize() == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Vector size is zero.", __FILE__, __LINE__);
+            }
+
             std::unordered_map<Type, size_t> frequencyMap;
 
             for (size_t i = 0; i < vector.getSize(); ++i) {
@@ -77,10 +127,14 @@ namespace doob {
             return modes;
         }
 
-        // function to calculate the range of a vector
+        // @brief calculate the range of a vector.
+        // @param vector The input vector.
+        // @return the range of the vector.
         static Type range(const dVector<Type>& vector) {
+
             if (vector.getSize() == 0) {
-                return Type();
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Vector size is zero.", __FILE__, __LINE__);
             }
 
             Type minVal = vector[0];

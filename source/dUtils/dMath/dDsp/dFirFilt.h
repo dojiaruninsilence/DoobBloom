@@ -1,11 +1,16 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include "dUtils/dMath/dDsp/dWindowFunc.h"
 
 #include "dUtils/dMath/dGeneralMath/dFilterDesign.h"
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 
 namespace doob {
+
+    // @enum FilterType
+    // @brief Enumeration for the type of FIR filter.
     enum class FilterType {
         LOW_PASS,
         HIGH_PASS,
@@ -13,16 +18,26 @@ namespace doob {
         BAND_STOP
     };
 
+    // @enum FilterDesignMethod
+    // @brief Enumeration for the method used to design the FIR filter.
     enum class FilterDesignMethod {
         WINDOWING,
         FREQUENCY_SAMPLING,
         PARKS_MCCLELLAN
     };
 
+    // @class dFirFilt
+    // @brief Class for designing and applying FIR filters.
+    // @tparam Type The data type for filter coefficients and signal processing.
     template <typename Type>
     class dFirFilt {
     public:
-        // constructor
+        // @brief Constructor for the dFirFilt class.
+        // @param coefficients Initial filter coefficients.
+        // @param filterLength Length of the filter.
+        // @param filterType Type of the filter(low - pass, high - pass, etc.).
+        // @param samplingFrequency Sampling frequency of the signal.
+        // @param designMethod Method used to design the filter.
         dFirFilt(
             const dVector<Type>& coefficients,
             size_t filterLength,
@@ -40,10 +55,12 @@ namespace doob {
             initializeFilterState();
         }
 
-        // destructor
+        // @brief Destructor for the dFirFilt class.
         ~dFirFilt() {}
 
-        // method to apply the fir filter to an input signal
+        // @brief Method to apply the FIR filter to an input signal.
+        // @param inputSignal The input signal to be filtered.
+        // @return The filtered output signal.
         dVector<Type> filterSignal(const dVector<Type>& inputSignal) {
 
             // create a vector to store the filtered output signal
@@ -70,7 +87,7 @@ namespace doob {
         FilterDesignMethod m_designMethod;
 
         // private methods
-        // coefficient calculation method
+        // @brief Method to calculate filter coefficients.
         void calculateCoefficients() {
             // clear existing coefficients
             m_coefficients.resize(0);
@@ -101,6 +118,10 @@ namespace doob {
                 idealResponse = dFilterDesign<Type>::designBandStopFilter(
                     lowStopFrequency, highStopFrequency, m_filterLength, m_samplingFrequency);
                 break;
+            default:
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Invalid filter type.", __FILE__, __LINE__);
+                return;
             }
 
             // apply window to ideal response
@@ -109,14 +130,15 @@ namespace doob {
             }
         }
 
-        // method to initialize filter state
+        // @brief Method to initialize the filter state.
         void initializeFilterState() {
 
             // initialize the filter state vector with zeros
             m_filterState.resize(m_filterLength, Type(0));
         }
 
-        // method to update filter state
+        // @brief Method to update the filter state with the latest input sample.
+        // @param latest_input_sample The latest input sample to update the filter state.
         void updateFilterState(Type latest_input_sample) {
 
             // shift existing filter state to the left
@@ -128,11 +150,15 @@ namespace doob {
             m_filterState[0] = latest_input_sample;
         }
 
-        // method to apply the filter to a single input sample
+        // @brief Method to apply the filter to a single input sample.
+        // @param inputSignal The input signal to be filtered.
+        // @param index The current index of the input signal.
+        // @return The filtered value of the current input sample.
         Type applyFilter(const DMath::DVector<Type>& inputSignal, size_t index) {
             // ensure that the current index is within the valid range
             if (index >= m_filterLength || index >= inputSignal.getSize()) {
-                throw std::out_of_range("Index out of range in applyFilter function");
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Index out of range in applyFilter function", __FILE__, __LINE__);
             }
 
             Type filteredValue = Type(0);
@@ -142,7 +168,8 @@ namespace doob {
                 // ensure that the index is within the valid range for the filter state
                 size_t stateIndex = index + (m_filterLength - 1) - i;
                 if (stateIndex >= m_filterLength) {
-                    throw std::out_of_range("Filter state index out of range in applyFilter function");
+                    reportError(errorLevel::D_ERROR, errorCode::OUT_OF_BOUNDS,
+                        "Filter state index out of range in applyFilter function", __FILE__, __LINE__);
                 }
 
                 filteredValue += m_coefficients[i] * m_filterState[stateIndex];
@@ -150,5 +177,12 @@ namespace doob {
 
             return filteredValue;
         }
+
+        // Placeholder variables for design functions
+        Type cutoffFrequency = 0; // Example default value
+        Type lowCutoffFrequency = 0; // Example default value
+        Type highCutoffFrequency = 0; // Example default value
+        Type lowStopFrequency = 0; // Example default value
+        Type highStopFrequency = 0; // Example default value
     };
 }

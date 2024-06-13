@@ -1,5 +1,7 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include "dUtils/dMath/dGeneralMath/dMathDefines.h"
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 #include "dUtils/dMath/dGeneralMath/dVectorComplex.h"
@@ -7,10 +9,16 @@
 #include <cmath>
 
 namespace doob {
+
+    // @class dFft
+    // @brief Utility class for performing FFT operations.
+    // @tparam Type The type of elements for the FFT operations.
     template <typename Type>
     class dFft {
     public:
-        // compute the forward fft of a complex signal
+        // @brief Compute the forward FFT of a complex signal.
+        // @param signal The input complex signal.
+        // @return The FFT of the input signal.
         static dVectorComplex<std::complex<Type>> forward(
             const dVectorComplex<std::complex<Type>>& signal) {
 
@@ -19,6 +27,12 @@ namespace doob {
             // base case of recursion: if the size of the signal is 1, return it as is 
             if (N == 1) {
                 return signal;
+            }
+
+            // Ensure N is a power of 2
+            if ((N & (N - 1)) != 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "FFT input size is not a power of 2.", __FILE__, __LINE__);
             }
 
             dVectorComplex<std::complex<Type>> even(N / 2), odd(N / 2);
@@ -43,12 +57,20 @@ namespace doob {
             return result;
         }
 
-        // compute the inverse fft of a complex signal
+        // @brief Compute the inverse FFT of a complex signal.
+        // @param spectrum The input frequency domain spectrum.
+        // @return The inverse FFT of the input spectrum.
         static dVectorComplex<std::complex<Type>> inverse(
             const dVectorComplex<std::complex<Type>>& spectrum) {
 
             // get the size of the spectrum
             size_t N = spectrum.getSize();
+
+            // Ensure N is a power of 2
+            if ((N & (N - 1)) != 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "FFT input size is not a power of 2.", __FILE__, __LINE__);
+            }
 
             // conjugate the spectrum
             dVectorComplex<std::complex<Type>> conjugate_spectrum = spectrum;
@@ -67,10 +89,18 @@ namespace doob {
             return time_domain_signal;
         }
 
-        // compute the forward fft of a real signal
+        // @brief Compute the forward FFT of a real signal.
+        // @param signal The input real signal.
+        // @return The FFT of the input signal.
         static dVectorComplex<std::complex<Type>> forwardReal(const dVector<Type>& signal) {
 
             size_t N = signal.getSize();
+
+            // Ensure N is a power of 2
+            if ((N & (N - 1)) != 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "FFT input size is not a power of 2.", __FILE__, __LINE__);
+            }
 
             dVectorComplex<std::complex<Type>> spectrum(N);
 
@@ -84,12 +114,20 @@ namespace doob {
             return spectrum;
         }
 
-        // perform complex multiplication in the frequency domain
+        // @brief Perform complex multiplication in the frequency domain.
+        // @param spectrum1 The first input spectrum.
+        // @param spectrum2 The second input spectrum.
+        // @return The result of the complex multiplication.
         static dVectorComplex<std::complex<Type>> complexMultiply(
             const dVectorComplex<std::complex<Type>>& spectrum1,
             const dVectorComplex<std::complex<Type>>& spectrum2) {
 
             size_t N = spectrum1.getSize();
+
+            if (N != spectrum2.getSize()) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Spectra sizes do not match for complex multiplication.", __FILE__, __LINE__);
+            }
 
             dVectorComplex<std::complex<Type>> result(N);
             for (size_t i = 0; i < N; ++i) {

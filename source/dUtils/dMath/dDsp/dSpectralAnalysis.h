@@ -1,5 +1,7 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include "dUtils/dMath/dDsp/dDspUtils.h"
 #include "dUtils/dMath/dDsp/dFft.h"
 #include "dUtils/dMath/dDsp/dWindowFunc.h"
@@ -8,6 +10,9 @@
 #include "dUtils/dMath/dGeneralMath/dVectorComplex.h"
 
 namespace doob {
+
+    // @brief template class for performing spectral analysis on a signal.
+    // @tparam Type data type for signal processing(float, double, etc.).
     template <typename Type>
     class dSpectralAnalysis {
     public:
@@ -15,10 +20,10 @@ namespace doob {
         dSpectralAnalysis()
             : fftSize(1024), frameSize(512), hopSize(256), samplingRate(44100), windowFunctionType(0) {
 
-            // Initialize FFT object
+            // initialize FFT object
             fft = DFft<Type>();
 
-            // Default values for FFT window and other parameters
+            // default values for FFT window and other parameters
             fftWindow.clear();
         }
 
@@ -26,7 +31,9 @@ namespace doob {
             // destructor implementation
         }
 
-        // function to perform spectral analysis on input signal
+        // @brief perform spectral analysis on the input signal.
+        // @param inputSignal input signal to analyze.
+        // @return spectral data represented as a vector of vectors(frames).
         dVector<Type> analyze(const dVector<Type>& inputSignal) {
 
             // validate input signal
@@ -63,7 +70,7 @@ namespace doob {
             return spectralData; // return the resulting spectral data
         }
 
-        // Function to compute the magnitude spectrum from the complex spectrum
+        // function to compute the magnitude spectrum from the complex spectrum
         dVector<Type> computeMagnitude(const dVectorComplex<std::complex<Type>>& spectrum) {
 
             // initialize vector to store magnitudes
@@ -77,8 +84,11 @@ namespace doob {
             return magnitudes;
         }
 
-        // Function to generate a spectrogram from the input signal
-        // This function returns a 2D array representing the spectrogram
+        // @brief generate a spectrogram from the input signal.
+        // @param inputSignal input signal to analyze.
+        // @param frameSize size of each analysis frame.
+        // @param hopSize hop size between consecutive frames.
+        // @return spectrogram represented as a vector of vectors(frames).
         dVector<dVector<Type>> generateSpectrogram(
             const dVector<Type>& inputSignal, size_t frameSize, size_t hopSize) {
             // validate input signal
@@ -112,29 +122,30 @@ namespace doob {
             return spectrogram;
         }
 
-        // Function to plot the frequency spectrum of the input signal
+        // @brief plot the frequency spectrum of the input signal.
+        // @param inputSignal input signal to analyze.
         void plotFrequencySpectrum(const dVector<Type>& inputSignal) {
 
-            // Validate input signal
+            // validate input signal
             validateInputSignal(inputSignal);
 
-            // Apply window function to the entire signal
+            // apply window function to the entire signal
             dVector<Type> windowedSignal = inputSignal;
             applyWindowFunction(windowedSignal);
 
-            // Compute FFT
+            // compute FFT
             dVectorComplex<std::complex<Type>> spectrum = fft.forwardReal(windowedSignal);
 
-            // Compute magnitude spectrum
+            // compute magnitude spectrum
             dVector<Type> magnitude = computeMagnitude(spectrum);
 
-            // Plot the magnitude spectrum using your preferred plotting library
-            // Example: You can print the magnitude values to the console for now
+            // plot the magnitude spectrum using your preferred plotting library
+            // example: You can print the magnitude values to the console for now
             for (size_t i = 0; i < magnitude.getSize(); ++i) {
                 std::cout << "Frequency bin " << i << ": " << magnitude[i] << std::endl;
             }
 
-            // After obtaining the magnitude spectrum, you can use your preferred plotting library
+            // after obtaining the magnitude spectrum, you can use your preferred plotting library
             // to visualize it (e.g., Matplotlib in Python, or plotting libraries in C++)
         }
 
@@ -149,6 +160,9 @@ namespace doob {
         int windowFunctionType; // type of window function (e.g., hamming, hann, etc.)
 
         // private helper functions
+
+        // @brief initialize the FFT object with a specific FFT size.
+        // @param fftSize size of the FFT window.
         void initializeFFT(size_t fftSize) {
             this->fftSize = fftSize;
 
@@ -159,11 +173,14 @@ namespace doob {
             generateWindow(fftSize);
         }
 
+        // @brief apply the FFT window function to a signal.
+        // @param signal signal to which the window function is applied.
         void applyWindowFunction(dVector<Type>& signal) {
 
             // check if the signal size matches the window size
             if (signal.getSize() != fftSize) {
-                throw std::invalid_argument("Signal size does not match FFT window size.");
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Signal size does not match FFT window size.", __FILE__, __LINE__);
             }
 
             // apply the window function to the signal
@@ -172,11 +189,15 @@ namespace doob {
             }
         }
 
+        // @brief split the input signal into overlapping frames.
+        // @param inputSignal input signal to split into frames.
+        // @return vector of vectors representing frames.
         dVector<dVector<Type>> splitIntoFrames(const dVector<Type>& inputSignal) {
 
             // Check if input signal size is less than or equal to frame size
             if (inputSignal.getSize() <= frameSize) {
-                throw std::invalid_argument("Input signal size is less than or equal to frame size.");
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Input signal size is less than or equal to frame size.", __FILE__, __LINE__);
             }
 
             // Calculate number of frames
@@ -197,19 +218,25 @@ namespace doob {
             return frames;
         }
 
+        // @brief Validate the input signal for spectral analysis.
+        // @param inputSignal Input signal to validate.
         void validateInputSignal(const dVector<Type>& inputSignal) {
 
             // check if the input signal is empty
             if (inputSignal.getSize() == 0) {
-                throw std::invalid_argument("Input signal is empty.");
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Input signal is empty.", __FILE__, __LINE__);
             }
 
             // check if the size of the input signal is less than or equal to the FFT size
             if (inputSignal.getSize() <= fftSize) {
-                throw std::invalid_argument("Input signal size is less than or equal to FFT size.");
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Input signal size is less than or equal to FFT size.", __FILE__, __LINE__);
             }
         }
 
+        // @brief Preprocess the input signal for spectral analysis (normalize and zero-pad).
+        // @param inputSignal Input signal to preprocess.
         void preprocessSignal(dVector<Type>& inputSignal) {
 
             // normalize the input signal to the range [0, 1]
@@ -227,12 +254,16 @@ namespace doob {
         }
 
         //------------------need to add a switch case for multiple window function types--------------
+        // @brief Generate the FFT window function with a specific size.
+        // @param size Size of the FFT window function.
         void generateWindow(size_t size) {
 
             // generate the FFT window function
             fftWindow = DWindowFunc<Type>::hamming(size);
         }
 
+        // @brief Process spectral data (e.g., apply additional filtering or feature extraction).
+        // @param frames Vector of complex frames to process.
         void processSpectralData(dVector<dVectorComplex<std::complex<Type>>>& frames) {
 
             // perform spectral processing on each frame
@@ -255,4 +286,4 @@ namespace doob {
             }
         }
     };
-}
+} // End of namespace doob

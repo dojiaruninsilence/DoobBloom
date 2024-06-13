@@ -1,9 +1,15 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include <memory>
 #include <algorithm>
 
 namespace doob {
+
+    // @class dVec2
+    // @brief A 2D vector class.
+    // @tparam Type The type of elements in the vector.
     template <typename Type>
     class dVec2 {
     public:
@@ -12,6 +18,9 @@ namespace doob {
         dVec2(Type x = Type(), Type y = Type()) : x(x), y(y) {}
     };
 
+    // @class dVec3
+    // @brief A 3D vector class.
+    // @tparam Type The type of elements in the vector.
     template <typename Type>
     class dVec3 {
     public:
@@ -20,6 +29,9 @@ namespace doob {
         dVec3(Type x = Type(), Type y = Type(), Type z = Type()) : x(x), y(y), z(z) {}
     };
 
+    // @class dVec4
+    // @brief A 4D vector class.
+    // @tparam Type The type of elements in the vector.
     template <typename Type>
     class dVec4 {
     public:
@@ -28,6 +40,9 @@ namespace doob {
         dVec4(Type x = Type(), Type y = Type(), Type z = Type(), Type w = Type()) : x(x), y(y), z(z), w(w) {}
     };
 
+    // @class dVector
+    // @brief A dynamic array class.
+    // @tparam Type The type of elements in the vector.
     template <typename Type>
     class dVector {
 
@@ -42,16 +57,6 @@ namespace doob {
         // destructor
         ~dVector() { delete[] data; }
 
-        // copy constructor
-        /*dVector(const dVector& other) {
-            size = other.size;
-            capacity = other.capacity;
-            data = new Type[capacity];
-            for (size_t i = 0; i < size; ++i) {
-                data[i] = other.data[i];
-            }
-        }*/
-
         // move constructor
         dVector(dVector&& other) noexcept {
             size = other.size;
@@ -61,20 +66,6 @@ namespace doob {
             other.capacity = 0;
             other.data = nullptr;
         }
-
-        // copy assignment operator
-        /*dVector& operator=(const dVector& other) {
-            if (this != &other) {
-                delete[] data;
-                size = other.size;
-                capacity = other.capacity;
-                data = new Type[capacity];
-                for (size_t i = 0; i < size; ++i) {
-                    data[i] = other.data[i];
-                }
-            }
-            return *this;
-        }*/
 
         // move assignment operator
         dVector& operator=(dVector&& other) noexcept {
@@ -136,7 +127,8 @@ namespace doob {
         // method to find the minimum and maximum values in the vector
         Type min() const {
             if (size == 0) {
-                return 0;
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR, "Vector size is zero.", __FILE__, __LINE__);
+                return Type();
             }
             Type minValue = data[0];
             for (size_t i = 1; i < size; ++i) {
@@ -149,7 +141,8 @@ namespace doob {
 
         Type max() const {
             if (size == 0) {
-                return 0;
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR, "Vector size is zero.", __FILE__, __LINE__);
+                return Type();
             }
             Type maxValue = data[0];
             for (size_t i = 1; i < size; ++i) {

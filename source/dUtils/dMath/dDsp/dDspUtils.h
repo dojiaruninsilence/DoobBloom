@@ -1,5 +1,7 @@
 #pragma once
 
+#include "dUtils/dDiagnostics/dErrKit.h"
+
 #include "dUtils/dMath/dGeneralMath/dSqrRtAbsFunctions.h"
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 #include "dUtils/dMath/dGeneralMath/dVectorComplex.h"
@@ -7,6 +9,10 @@
 #include <complex>
 
 namespace doob {
+
+    // @class dDspUtils
+    // @brief Utility class for various DSP operations.
+    // @tparam Type The type of elements for the DSP operations.
     template <typename Type>
     class dDspUtils {
     public:
@@ -14,13 +20,17 @@ namespace doob {
         dDspUtils() {}
         ~dDspUtils() {}
 
-        // function to calculate the magnitude of a complex number
+        // @brief Calculate the magnitude of a complex number.
+        // @param value The complex number.
+        // @return The magnitude of the complex number.
         static Type complexMagnitude(const std::complex<Type>& value) {
 
             return dSqrRtAbsFunctions<Type>::sqrt(value.real() * value.real() + value.imag() * value.imag());
         }
 
-        // function to convert a vector of complex numbers to their magnitudes
+        // @brief Convert a vector of complex numbers to their magnitudes.
+        // @param spectrum The vector of complex numbers.
+        // @return A vector of magnitudes.
         static dVectorComplex<Type> complexVectorMagnitude(
             const dVectorComplex<std::complex<Type>>& spectrum) {
 
@@ -33,12 +43,21 @@ namespace doob {
             return magnitudes;
         }
 
-        // function to normalize a signal to a specified range
+        // @brief Normalize a signal to a specified range.
+        // @param signal The input signal vector.
+        // @param minRange The minimum range value.
+        // @param maxRange The maximum range value.
+        // @return The normalized signal vector.
         static dVector<Type> normalizeSignal(
             const dVector<Type>& signal, Type minRange, Type maxRange) {
 
             Type minSignal = signal.min();
             Type maxSignal = signal.max();
+
+            if (minSignal == maxSignal) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Signal min and max values are equal, normalization is not possible.", __FILE__, __LINE__);
+            }
 
             Type scale = (maxRange - minRange) / (maxSignal - minSignal);
 
@@ -50,7 +69,9 @@ namespace doob {
             return normalizedSignal;
         }
 
-        // function to trim leading zeros from a signal
+        // @brief Trim leading zeros from a signal.
+        // @param signal The input signal vector.
+        // @return The signal vector with leading zeros trimmed.
         static dVector<Type> trimLeadingZeros(const dVector<Type>& signal) {
 
             size_t start = 0;
@@ -61,7 +82,9 @@ namespace doob {
             return signal.subVector(start);
         }
 
-        // function to trim trailing zeros from a signal
+        // @brief Trim trailing zeros from a signal.
+        // @param signal The input signal vector.
+        // @return The signal vector with trailing zeros trimmed.
         static dVector<Type> trimTrailingZeros(const dVector<Type>& signal) {
 
             size_t end = signal.getSize();
@@ -72,7 +95,11 @@ namespace doob {
             return signal.subVector(0, end);
         }
 
-        // function to trim signal between start and end indices
+        // @brief Trim signal between start and end indices.
+        // @param signal The input signal vector.
+        // @param start The starting index.
+        // @param end The ending index.
+        // @return The trimmed signal vector.
         static dVector<Type> trimSignal(
             const dVector<Type>& signal, size_t start, size_t end) {
 
@@ -82,9 +109,17 @@ namespace doob {
             return signal.subVector(start, end);
         }
 
-        // function to zero pad a signal to a specified length
+        // @brief Zero pad a signal to a specified length.
+        // @param signal The input signal vector.
+        // @param paddedLength The desired length after padding.
+        // @return The zero - padded signal vector.
         static dVector<Type> zeroPadSignal(
             const dVector<Type>& signal, size_t paddedLength) {
+
+            if (paddedLength < signal.getSize()) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Padded length is less than the signal size.", __FILE__, __LINE__);
+            }
 
             size_t paddingSize = std::max<size_t>(paddedLength - signal.getSize(), 0);
 
@@ -101,9 +136,18 @@ namespace doob {
             return paddedSignal;
         }
 
-        // function to compute moving average of a vector
+        // @brief Compute moving average of a vector.
+        // @param input The input signal vector.
+        // @param windowSize The size of the moving average window.
+        // @return The signal vector with moving average applied.
         static dVector<Type> movingAverage(
             const dVector<Type>& input, size_t windowSize) {
+
+            if (windowSize == 0) {
+                reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR,
+                    "Window size for moving average is zero.", __FILE__, __LINE__);
+            }
+
             dVector<Type> result(input.getSize());
 
             for (size_t i = 0; i < input.getSize(); ++i) {
