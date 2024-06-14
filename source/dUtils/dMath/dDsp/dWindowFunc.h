@@ -5,10 +5,15 @@
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 
 namespace doob {
+
+    // @brief template class for generating various window functions.
+    // @tparam Type the type of elements in the window(e.g., float, double).
     template <typename Type>
     class dWindowFunc {
     public:
-        // generate a rectangular window function
+        // @brief generate a rectangular window function.
+        // @param size size of the window function.
+        // @return vector containing the rectangular window function.
         static dVector<Type> rectangular(size_t size) {
 
             dVector<Type> window(size);
@@ -18,7 +23,9 @@ namespace doob {
             return window;
         }
 
-        // generate a hamming window function
+        // @brief generate a Hamming window function.
+        // @param size size of the window function.
+        // @return vector containing the Hamming window function.
         static dVector<Type> hamming(size_t size) {
 
             dVector<Type> window(size);
@@ -33,7 +40,9 @@ namespace doob {
             return window;
         }
 
-        // generate a hanning window function
+        // @brief Generate a Hanning window function.
+        // @param size Size of the window function.
+        // @return Vector containing the Hanning window function.
         static dVector<Type> hanning(size_t size) {
 
             dVector<Type> window(size);
@@ -48,7 +57,9 @@ namespace doob {
             return window;
         }
 
-        // generate a blackman window function
+        // @brief generate a Blackman window function.
+        // @param size dize of the window function.
+        // @return vector containing the Blackman window function.
         static dVector<Type> blackman(size_t size) {
 
             dVector<Type> window(size);

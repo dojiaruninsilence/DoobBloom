@@ -57,11 +57,11 @@ namespace doob {
 		initializeImgui();
 
 		voice = std::make_unique<dVoice>();
-		voice->addSound(std::make_unique<dSineWaveGen>(300, 44100));
+		voice->addSound(std::make_unique<dSineWaveGen>(440, 44100));
 
 		std::string name = "testSineWave";
 
-		audio = std::make_unique<dEngine>(4096, 2, name);
+		audio = std::make_unique<dEngine>(512, 2, name);
 
 		audio->initialize();
 		audio->addVoice(std::move(voice));
@@ -375,7 +375,7 @@ namespace doob {
 
 		glfwPollEvents();
 
-		audio->stop();
+		// audio->stop();
 	}
 
 	void dGenericFrame::genericFrameShutdown() {
