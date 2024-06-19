@@ -1,5 +1,7 @@
 #pragma once
 
+#include "dUtils/dUuid.h"
+
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 
 namespace doob {
@@ -41,5 +43,7 @@ namespace doob {
 		dVec2<float> m_mouseDelta;
 
 		bool m_isDocked = false;
+
+		dUuid m_oscId;
 	};
 }

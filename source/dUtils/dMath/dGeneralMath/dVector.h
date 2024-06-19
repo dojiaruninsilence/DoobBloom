@@ -51,32 +51,37 @@ namespace doob {
         using iterator = Type*;
         using const_iterator = const Type*;
 
-        // constructor
-        dVector() : data(nullptr), size(0), capacity(0) {}
+        // default constructor
+        dVector() : m_data(nullptr), size(0), capacity(0) {}
+
+        // size constructor
+        dVector(size_t initialSize) : size(initialSize), capacity(initialSize) {
+            m_data = new Type[capacity];
+        }
 
         // destructor
-        ~dVector() { delete[] data; }
+        ~dVector() { delete[] m_data; }
 
         // move constructor
         dVector(dVector&& other) noexcept {
             size = other.size;
             capacity = other.capacity;
-            data = other.data;
+            m_data = other.m_data;
             other.size = 0;
             other.capacity = 0;
-            other.data = nullptr;
+            other.m_data = nullptr;
         }
 
         // move assignment operator
         dVector& operator=(dVector&& other) noexcept {
             if (this != &other) {
-                delete[] data;
+                delete[] m_data;
                 size = other.size;
                 capacity = other.capacity;
-                data = other.data;
+                m_data = other.m_data;
                 other.size = 0;
                 other.capacity = 0;
-                other.data = nullptr;
+                other.m_data = nullptr;
             }
             return *this;
         }
@@ -86,14 +91,14 @@ namespace doob {
             if (size >= capacity) {
                 reserve(capacity == 0 ? 1 : capacity * 2);
             }
-            data[size++] = std::move(value);
+            m_data[size++] = std::move(value);
         }
 
         void push_back(const Type& value) {
             if (size >= capacity) {
                 reserve(capacity == 0 ? 1 : capacity * 2);
             }
-            data[size++] = value;
+            m_data[size++] = value;
         }
 
         void push_back(const Type* values, size_t numValues) {
@@ -113,10 +118,10 @@ namespace doob {
             if (newCapacity > capacity) {
                 Type* newData = new Type[newCapacity];
                 for (size_t i = 0; i < size; ++i) {
-                    newData[i] = std::move(data[i]);
+                    newData[i] = std::move(m_data[i]);
                 }
-                delete[] data;
-                data = newData;
+                delete[] m_data;
+                m_data = newData;
                 capacity = newCapacity;
             }
         }
@@ -130,10 +135,10 @@ namespace doob {
                 reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR, "Vector size is zero.", __FILE__, __LINE__);
                 return Type();
             }
-            Type minValue = data[0];
+            Type minValue = m_data[0];
             for (size_t i = 1; i < size; ++i) {
-                if (data[i] < minValue) {
-                    minValue = data[i];
+                if (m_data[i] < minValue) {
+                    minValue = m_data[i];
                 }
             }
             return minValue;
@@ -144,22 +149,26 @@ namespace doob {
                 reportError(errorLevel::D_ERROR, errorCode::INPUT_VALIDATION_ERROR, "Vector size is zero.", __FILE__, __LINE__);
                 return Type();
             }
-            Type maxValue = data[0];
+            Type maxValue = m_data[0];
             for (size_t i = 1; i < size; ++i) {
-                if (data[i] > maxValue) {
-                    maxValue = data[i];
+                if (m_data[i] > maxValue) {
+                    maxValue = m_data[i];
                 }
             }
             return maxValue;
         }
 
         // Returns an iterator to the beginning of the container
-        iterator begin() { return data; }
-        const_iterator begin() const { return data; }
+        iterator begin() { return m_data; }
+        const_iterator begin() const { return m_data; }
 
         // Returns an iterator to the end of the container
-        iterator end() { return data + size; }
-        const_iterator end() const { return data + size; }
+        iterator end() { return m_data + size; }
+        const_iterator end() const { return m_data + size; }
+
+        // method to access the underlying array
+        Type* data() { return m_data; }
+        const Type* data() const { return m_data; }
 
         // method to resize the vector
         void resize(size_t newSize) {
@@ -179,7 +188,7 @@ namespace doob {
             else {
                 reserve(newSize);
                 for (size_t i = size; i < newSize; ++i) {
-                    data[i] = value;
+                    m_data[i] = value;
                 }
                 size = newSize;
             }
@@ -203,7 +212,7 @@ namespace doob {
             subvec.reserve(subvecSize);
 
             for (size_t i = start; i < end; ++i) {
-                subvec.push_back(data[i]);
+                subvec.push_back(m_data[i]);
             }
 
             return subvec;
@@ -219,26 +228,26 @@ namespace doob {
                 size = startIndex + otherSize;
             }
             for (size_t i = 0; i < otherSize; ++i) {
-                data[startIndex + i] = otherVector[i];
+                m_data[startIndex + i] = otherVector[i];
             }
         }
 
         // method to access elements by index
-        Type& operator[](size_t index) { return data[index]; }
-        const Type& operator[](size_t index) const { return data[index]; }
+        Type& operator[](size_t index) { return m_data[index]; }
+        const Type& operator[](size_t index) const { return m_data[index]; }
 
         // method to erase an element by index
         void erase(size_t index) {
             if (index < size) {
                 for (size_t i = index; i < size - 1; ++i) {
-                    data[i] = std::move(data[i + 1]);
+                    m_data[i] = std::move(m_data[i + 1]);
                 }
                 --size;
             }
         }
 
     private:
-        Type* data; // Pointer to the dynamic array holding the elements
+        Type* m_data; // Pointer to the dynamic array holding the elements
         size_t size; // Number of elements in the vector
         size_t capacity; // Capacity of the dynamic array
     };

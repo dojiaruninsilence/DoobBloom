@@ -11,15 +11,15 @@ namespace doob {
 
     // random Number Generator class
     template <typename Type>
-    class DRng {
+    class dRng {
     public:
         // constructor
-        DRng() : rng(std::random_device{}()) {
+        dRng() : rng(std::random_device{}()) {
             DB_INFO("DRng initialized with random seed");
         }
 
         // destuctor
-        ~DRng() {}
+        ~dRng() {}
 
         // generate a random value between min (inclusive and max(exclusive)
         Type next(Type min, Type max) {
@@ -48,6 +48,13 @@ namespace doob {
             else if (std::is_same<Type, long double>{}) {
                 std::uniform_real_distribution<long double> dist(min, max);
                 return dist(rng);
+            }
+            else if (std::is_same<Type, unsigned int>{}) {
+                min = static_cast<float>(min);
+                max = static_cast<float>(max);
+                std::uniform_real_distribution<float> dist(min, max);
+                unsigned int result = static_cast<unsigned int>(dist(rng));
+                return result;
             }
             else {
                 reportError(errorLevel::D_ERROR, errorCode::RUNTIME_ERROR,

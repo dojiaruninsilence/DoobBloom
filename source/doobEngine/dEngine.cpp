@@ -2,8 +2,12 @@
 
 #include "dEngine.h"
 
+#include <algorithm>
+
 namespace doob {
-	dEngine::dEngine(unsigned int bufferSize, int channels, std::string name) : m_bufferSize(bufferSize), m_channels(channels), m_name(name) {}
+	dEngine::dEngine(unsigned int bufferSize, int channels, std::string name) 
+		: m_bufferSize(bufferSize), m_channels(channels), m_name(name) {}
+
 	dEngine::~dEngine() {
 		if (m_audio.isStreamOpen()) {
 			m_audio.closeStream();
@@ -19,7 +23,6 @@ namespace doob {
 		RtAudio::StreamOptions options;
 		options.flags = RTAUDIO_MINIMIZE_LATENCY;
 
-		//m_audio.openStream(&params, nullptr, RTAUDIO_FLOAT32, 44100, &m_bufferSize, &audioCallback, this, &options);
 		try {
 			m_audio.openStream(&params, nullptr, RTAUDIO_FLOAT32, 44100, &m_bufferSize, &audioCallback, this, &options);
 		}
@@ -32,13 +35,34 @@ namespace doob {
 	}
 
 	void dEngine::addVoice(std::unique_ptr<dVoice> voice) {
+		dUuid voiceId = voice->getId();
+		m_uuidToVoiceMap[voiceId] = voice.get();
 		m_voices.push_back(std::move(voice));
 	}
 
-	void dEngine::removeVoice(size_t index) {
-		if (index < m_voices.getSize()) {
-			m_voices.erase(index);
+	void dEngine::removeVoice(const dUuid& uuid) {
+		auto it = m_uuidToVoiceMap.find(uuid);
+		if (it != m_uuidToVoiceMap.end()) {
+			auto voiceIt = std::find_if(m_voices.begin(), m_voices.end(),
+				[&](const std::unique_ptr<dVoice>& v) { return v->getId() == uuid; });
+			if (voiceIt != m_voices.end()) {
+				size_t index = std::distance(m_voices.begin(), voiceIt);
+				m_voices.erase(index);
+				m_uuidToVoiceMap.erase(it);
+			}
 		}
+	}
+
+	dVoice* dEngine::getVoiceByUuid(const dUuid& uuid) const {
+		auto it = m_uuidToVoiceMap.find(uuid);
+		if (it != m_uuidToVoiceMap.end()) {
+			return it->second;
+		}
+		return nullptr;
+	}
+
+	void dEngine::addOscilloscope(dOscilloscope* oscilloscope) {
+		m_oscilloscope = oscilloscope;
 	}
 
 	float dEngine::generateSample() {
@@ -46,8 +70,15 @@ namespace doob {
 		for (auto& voice : m_voices) {
 			sample += voice->generateSample();
 		}
+
+		m_sample = sample / m_voices.getSize(); // mix samples 
 		
-		return sample / m_voices.getSize(); // mix samples 
+		if (m_oscilloscope != nullptr) {
+			m_oscilloscope->addSample(m_sample);
+			// DB_INFO("sample added to oscilloscope , {}", m_sample);
+		}
+		
+		return m_sample;
 	}
 
 	void dEngine::setSampleRate(float sr) {
@@ -78,7 +109,6 @@ namespace doob {
 		RtAudioStreamStatus status, void* userData) {
 
 		dEngine* engine = static_cast<dEngine*>(userData);
-		//engine->handleAudioCallback(static_cast<float*>(outputBuffer), nBufferFrames);
 
 		float* buffer = static_cast<float*>(outputBuffer);
 
@@ -91,21 +121,4 @@ namespace doob {
 
 		return 0;
 	}
-
-	//void dEngine::handleAudioCallback(float* outputBuffer, unsigned int nBufferFrames) {
-	//	/*this->m_audio = m_audio;
-	//	this->m_voices = m_voices;
-	//	this->m_bufferSize = m_bufferSize;
-	//	this->m_channels = m_channels;*/
-
-	//	//float* buffer = static_cast<float*>(outputBuffer);
-
-	//	for (unsigned int i = 0; nBufferFrames; ++i) {
-	//		float sample = this->generateSample();
-	//		for (unsigned int j = 0; j < this->m_channels; ++j) {
-	//			*outputBuffer++ = sample;
-	//			//std::cout << "Generated sample: " << sample << std::endl;
-	//		}
-	//	}
-	//}
 }

@@ -4,7 +4,7 @@
 
 namespace doob {
 	dSineWaveGen::dSineWaveGen(float freq, float sr)
-		: m_frequency(freq), m_sampleRate(sr), m_phase(0.0f), m_amplitude(0.2f) {
+		: m_frequency(freq), m_sampleRate(sr), m_phase(0.0f), m_amplitude(1.0f) {
 		m_phaseIncrement = 1.0 / m_sampleRate;
 	}
 

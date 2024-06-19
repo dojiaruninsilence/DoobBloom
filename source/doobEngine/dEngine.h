@@ -2,11 +2,16 @@
 
 #include "doobEngine/dVoice.h"
 
+#include "dUI/dOscilloscope/dOscilloscopeManager.h"
+
+#include "dUtils/dUuid.h"
+
 #include "dUtils/dMath/dGeneralMath/dVector.h"
 
 #include "RtAudio.h"
 
 #include <memory>
+#include <unordered_map>
 
 
 namespace doob {
@@ -18,7 +23,11 @@ namespace doob {
 		bool initialize();
 
 		void addVoice(std::unique_ptr<dVoice> voice);
-		void removeVoice(size_t index);
+		void removeVoice(const dUuid& uuid);
+
+		dVoice* getVoiceByUuid(const dUuid& uuid) const;
+
+		void addOscilloscope(dOscilloscope* oscilloscope);
 
 		float generateSample();
 
@@ -27,6 +36,7 @@ namespace doob {
 		int getChannels() { return m_channels; }
 		int getBufferSize() { return m_bufferSize; }
 		std::string getName() { return m_name; }
+		float getSample() { return m_sample; }
 
 		void start();
 		void stop();
@@ -35,13 +45,16 @@ namespace doob {
 		static int audioCallback(void* outputBuffer, void* inputBuffer,
 			unsigned int nBufferFrames, double streamTime,
 			RtAudioStreamStatus status, void* userData);
-
-		//void handleAudioCallback(float* outputBuffer, unsigned int nBufferFrames);
 		
 		dVector<std::unique_ptr<dVoice>> m_voices;
+		std::unordered_map<dUuid, dVoice*> m_uuidToVoiceMap;
+
 		RtAudio m_audio;
 		unsigned int m_bufferSize;
 		int m_channels;
+
+		float m_sample;
+		dOscilloscope* m_oscilloscope = nullptr;
 
 		std::string m_name;
 	};

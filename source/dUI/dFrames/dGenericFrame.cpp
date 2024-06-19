@@ -13,6 +13,8 @@
 
 #include "dUI/dImgui/dImguiInit.h"
 
+#include "dUI/dOscilloscope/dOscilloscopeManager.h"
+
 #include "dUtils/dDiagnostics/dEventTesting.h"
 
 #include "dUtils/dRenderUtils/dColors.h"
@@ -24,6 +26,8 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include <string>
+
 namespace doob {
 
 	std::unique_ptr<dBaseWindow> genericFrame;
@@ -31,6 +35,9 @@ namespace doob {
 
 	std::unique_ptr<dEngine> audio;
 	std::unique_ptr<dVoice> voice;
+
+	std::unique_ptr<dOscilloscopeManager> oscilloscopeManager;
+	//dUuid oscId;
 
 	bool isFullscreen = false;
 	int windowX, windowY, windowWidth, windowHeight;
@@ -50,6 +57,7 @@ namespace doob {
 	}
 
 	void dGenericFrame::createGenericFrame() {
+
 		genericFrame = std::make_unique<dBaseWindow>();
 		genericFrame->baseWindowCreate(m_width, m_height, m_name, true);
 
@@ -59,12 +67,16 @@ namespace doob {
 		voice = std::make_unique<dVoice>();
 		voice->addSound(std::make_unique<dSineWaveGen>(440, 44100));
 
+		oscilloscopeManager = std::make_unique<dOscilloscopeManager>(1024);
+		m_oscId = oscilloscopeManager->createOscilloscope();
+
 		std::string name = "testSineWave";
 
 		audio = std::make_unique<dEngine>(512, 2, name);
 
 		audio->initialize();
 		audio->addVoice(std::move(voice));
+		audio->addOscilloscope(oscilloscopeManager->getOscilloscope(m_oscId));
 
 		ImGui_ImplGlfw_InitForOpenGL(genericFrame->getWindow(), true);
 		ImGui_ImplOpenGL3_Init("#version 130");
@@ -77,6 +89,9 @@ namespace doob {
 	void dGenericFrame::genericFrameUpdateBegin() {
 
 		audio->start();
+		//oscilloscope->addSample(audio->getSample());
+		// DB_INFO(oscilloscope->getBuffer()[0]);
+		oscilloscopeManager->getOscilloscope(m_oscId)->printBuffer();
 
 		glfwMakeContextCurrent(genericFrame->getWindow());
 		ImGui_ImplOpenGL3_NewFrame();
@@ -351,6 +366,13 @@ namespace doob {
 		ImGui::PopStyleColor();
 
 		ImGui::ShowDemoWindow();
+
+		ImGui::Begin("Oscilloscope");
+
+		const dVector<float>& buffer = oscilloscopeManager->getBuffer(m_oscId);
+		ImGui::PlotLines("##Oscilloscope", buffer.data(), buffer.getSize());
+
+		ImGui::End();
 	}
 
 	void dGenericFrame::genericFrameUpdateEnd() {
